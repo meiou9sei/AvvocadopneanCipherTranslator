@@ -53,7 +53,7 @@ int main()
     int x;
     while (x != 0)
     {
-        printf("--------------------------------------------------\n");
+        printf("\n--------------------------------------------------\n");
         printf("\n");
         printf("AVVOCADOPNEAN CIPHER TRANSLATOR\n");
         printf("Created by Cameron Avvampato, 2021\n");
@@ -111,12 +111,12 @@ int main()
 
 void EngToAvv(void)
 {
-    printf("--------------------------------------------------\n");
+    printf("\n--------------------------------------------------\n");
     printf("test this is EngToAvv\n");
 }
 void AvvToEng(void)
 {
-    printf("--------------------------------------------------\n");
+    printf("\n--------------------------------------------------\n");
     printf("test this is AvvToEng\n");
 }
 
@@ -124,7 +124,7 @@ void AvvToEng(void)
 void aboutAvv(void)
 {
     //page 0
-    printf("--------------------------------------------------\n");
+    printf("\n--------------------------------------------------\n");
     printf("\nABOUT AVVOCADOPNEAN\n");
     printf("\n");
     printf("Table of contents\n");
@@ -138,8 +138,9 @@ void aboutAvv(void)
 
 
     //page 1
-    printf("--------------------------------------------------\n");
-    printf("\nHISTORY\n\n");
+    printf("\n--------------------------------------------------\n");
+    printf("\nHISTORY\n");
+    printf("\n");
     printf("Avvocadopnean is a simple cipher I created while in highschool.\n");
     printf("It coincidentally resembles the Tap Code cipher, and honestly\n");
     printf("that's probably a better developed cipher than what I came up with.\n");
@@ -150,25 +151,70 @@ void aboutAvv(void)
     printf("There is very little use for this cipher as basically only I speak it lmao\n");
 
     //page 2
-    printf("\n");
+    printf("\n--------------------------------------------------\n");
     printf("USING AVVOCADOPNEAN\n");
+    printf("\n");
     printf("To use standard script Avvocadopnean, lay out the symbols .,?!' to a 5x5 grid like so:\n");
-    printf("  .  ,  ?  !  '\n");
-    printf(". A  B  C  D  E\n");
-    printf(", F  G  H  I  J\n");
-    printf("? K  L  M  N  O\n");
-    printf("! P  Q  R  S  T\n");
-    printf("' U  V  W  X  Y\n");
-    printf("*Z is represented as ...\n");
+    printf("\n");
+    printf("           .   ,   ?   !   '  \n");
+    printf("         +-------------------+\n");
+    printf("       . | A | B | C | D | E |\n");
+    printf("         +-------------------+\n");
+    printf("       . | F | G | H | I | J |\n");
+    printf("         +-------------------+\n");
+    printf("       . | K | L | M | N | O |\n");
+    printf("         +-------------------+\n");
+    printf("       . | P | Q | R | S | T |\n");
+    printf("         +-------------------+\n");
+    printf("       . | U | V | W | X | Y |\n");
+    printf("         +-------------------+\n");
+    printf("        Z is represented as ...\n");
+    printf("\n");
     printf("\n");
     printf("To encrypt a letter, first use the horizontal row then the vertical column.\n");
     printf("Words are separated by a -\n");
     printf("\n");
     printf("For example:\n");
-    printf(",? .' ?, ?, ?' - '? ?' !? ?, .!\n");
-    printf("h  e  l  l  o    w  o  r  l  d\n");
+    printf("\n");
+    printf("    ,? .' ?, ?, ?' - '? ?' !? ?, .!\n");
+    printf("    h  e  l  l  o    w  o  r  l  d\n");
+    printf("\n");
 
-    printf("TEST 0 to return to main menu: ");
+    returnHome();
+}
+
+//basically the credits for the program
+void aboutProgram(void)
+{
+    printf("\n--------------------------------------------------\n");
+    printf("\n");
+    printf("ABOUT THIS PROGRAM");
+    printf("\n");
+    printf("The AVVOCADOPNEAN CIPHER TRANSLATOR program was written by Cameron Avvampato (me) in C.\n");
+    printf("This program was intends to:\n");
+    printf("    1. Translate Avvocadopnean and English to eachother\n");
+    printf("    2. Read and Write .txt files with English/Avvocadopnean\n");
+    printf("and:\n");
+    printf("    A. Be my first real program");
+    printf("        that's heckin' cool yo\n");
+    printf("    B. Solidify my understanding of arrays and loops");
+    printf("        by generating the cipher using ASCII codes and loops");
+
+    returnHome();
+}
+void laboratory(void)
+{
+    printf("\n--------------------------------------------------\n");
+    printf("test this is where i test stuff\n");
+}
+
+//test functions - idk if i'm keeping these
+
+//function keeps user on page until 0 is entered - prevents auto-exiting of mode before I create something probably more sophisticated
+//don't delete this when you're done with it, just comment it out
+void returnHome(void)
+{
+    printf("Enter 0 to return to main menu: ");
     int loopTrapper = 1;
     while (loopTrapper == 1)
     {
@@ -185,19 +231,5 @@ void aboutAvv(void)
         }
     }
 }
-
-//basically the credits for the program
-void aboutProgram(void)
-{
-    printf("--------------------------------------------------\n");
-    printf("test this is about the program\n");
-}
-void laboratory(void)
-{
-    printf("--------------------------------------------------\n");
-    printf("test this is where i test stuff\n");
-}
-
-
 
 

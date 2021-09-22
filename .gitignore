@@ -1,0 +1,4 @@
+*.layout
+*.depend
+ACTcb/bin/
+ACTcb/obj/

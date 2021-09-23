@@ -2,7 +2,7 @@
 
 //Avvocadopnean Cipher Translator
 //This program will translate between English and Avvocadopnean, with the standard A-Z, 0-9, and symbols . , ? ! '
-//later more symbols will be included, I just gotta find my document with all the rules
+//later more symbols from Avvocadopnean will be included
 
 /*
 TODO:
@@ -23,17 +23,7 @@ TODO:
                 with keys probably n/ext and b/ack
     x) add ability to read and write txt files with avvocadopnean
     x) add spoken generator
-//remove this comment later
-
-
-
-1) set clear goals in credits (about) part: 1) to familiarize self with arrays, loops, conditionals and in general learning by creating my first program, 2) read and write txt files
-2) make a new "How to read Avvocadopnean" section
-3) explain how to use software on README.md
-4) add a "spoken" outputter
-
-implement function by 1) just generate the symbols correctly 2) try translating it 3) then put it into a function
-
+    x) write in README.md instructions on how to use program
 
 */
 
@@ -209,8 +199,6 @@ void laboratory(void)
     printf("test this is where i test stuff\n");
 
     char avvSymbols[] = {'.', ',', '?', '!', '\''};
-    //char avvSet[26][3];
-    //thoughts - it would assign the symbol pairs to an array as strings, then the translator would interpret the ASCII of userString to
 
     //generates avvocadopnean symbol table
     for (int i = 0; i < 5; i++)
@@ -228,6 +216,7 @@ void laboratory(void)
     printf("\n");
 
     /*
+    ASCII Codes for A~Z
     printf("           .   ,   ?   !   '  \n");
     printf("         +-------------------+\n");
     printf("       . |65 |66 |67 |68 |69 |\n");
@@ -254,7 +243,10 @@ void laboratory(void)
     int testSymbolRow;
     int testSymbolColumn;
     int x;
+
     for(int i = 0; x != '\0'; i++)
+    //test loop for HELLO WORLD
+    //for(int i = 0; x < 11; i++)
     {
         if (testEngAvvInput[i] == 32)
         {

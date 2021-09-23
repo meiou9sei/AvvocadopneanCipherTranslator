@@ -237,28 +237,75 @@ void laboratory(const char avvSymbols[])
     printf("\n");
     printf("%s\n", EngAvvInput);
 
-    printf("\n");
     //converts string to cipher
     int SymbolRow;
     int SymbolColumn;
+    //records to array in case of output
+    char avvOutput[1000];
     //must declare int to any number EXCEPT 0, or it skips for loop.
     //I don't know why this works, but maybe nullChecker != '\0' thinks 0 == '\0'
     int nullChecker = 1;
+    int iAvvOutput = 0;
     for (int i = 0; nullChecker != '\0'; i++)
     {
         if (EngAvvInput[i] == 32)
         {
             printf("- ");
+            avvOutput[iAvvOutput] = '-';
+            iAvvOutput++;
+            avvOutput[iAvvOutput] = ' ';
+            iAvvOutput++;
         } else
         {
             //explanation how this works written under "ENG->AVV EXPLAINED"
             SymbolRow = (EngAvvInput[i] - 65) / 5;
             SymbolColumn = ((EngAvvInput[i] - 65) % 5);
             printf("%c%c ", avvSymbols[SymbolRow], avvSymbols[SymbolColumn]);
+            avvOutput[iAvvOutput] = avvSymbols[SymbolRow];
+            iAvvOutput++;
+            avvOutput[iAvvOutput] = avvSymbols[SymbolColumn];
+            iAvvOutput++;
+            avvOutput[iAvvOutput] = ' ';
+            iAvvOutput++;
         }
         nullChecker = EngAvvInput[i + 1];
     }
     printf("\n");
+
+    //output to .txt file
+    char printOrNay;
+    printf("\n");
+    printf("Would you like to write the translation to a .txt file?\n");
+    printf("!!!WARNING: THIS WILL OVERWRITE PREVIOUS TRANSLATIONS!!!\n");
+    printf("Additionally, you must restart the program after each output or this will not work\n");
+    printf("(I'll fix that in the future sorry)\n");
+    printf("\n");
+    printf("Y/N: ");
+    getchar();
+    scanf("%c", &printOrNay);
+
+    if (printOrNay == 'Y' || printOrNay == 'y')
+    {
+        FILE * fpointer = fopen("avvOutput.txt", "w");
+        int returnVal = fputs(avvOutput, fpointer);
+
+        if (returnVal >= 0)
+        {
+            printf("Successfully printed to avvOutput.txt!\n");
+            printf("ctrl+A/cmd+A and ctrl+C/cmd+C to copy the message.\n");
+            printf("ctrl+V/cmd+V to paste and send to friends!\n");
+        } else
+        {
+            printf("Failed\n");
+        }
+        fclose(fpointer);
+
+        //printf("Translation outputted to avvOutput.txt\n");
+
+    } else
+    {
+        printf("Alrighty then\n");
+    }
 
     //ENG->AVV EXPLAINED
     //user types HELLO
@@ -267,6 +314,8 @@ void laboratory(const char avvSymbols[])
     //ex: 72 - 64 = 8. then divide 8 / 5 = 1, or 1st row (,), then 8 % 5 = 3, or 3rd column (?).
     //takes these from avvSymbols[] and outputs to engAvvResult[], which increments each time and gets printed
     //ingenious i know hehe >:)
+    //AS FOR iAvvOutput AND avvOutput
+    //created in case of printing out avvOutput txt file
 
     /*
     ASCII Codes for A~Z

@@ -9,10 +9,10 @@ TODO:
     1) MENU
         make menu option expandable with int variable you can change. and make exit 0.
     2) EngToAvv
-        create this before Avv->Eng. do it in the lab isolated with just generating the letter characters using nested loops and arrays.
-        then try creating the translation.
-        then try adding punctuation.
-        then try adding numbers.
+        add lowercase
+        try adding punctuation.
+        try adding numbers.
+        maybe try putting space between string text, so that it lines up with translation?
     3) AvvToEng
         reverse EngToAvv, basically. Try to modify EngToAvv functions so they're reusable here.
     4) aboutAvv
@@ -35,14 +35,16 @@ void aboutProgram(void);
 void laboratory(void);
 void returnHome(void);
 
+//if you can, try to make constant: char avvSymbols[] = {'.', ',', '?', '!', '\''};
+
 
 int main()
 {
     //change this to number of menu options desired
     int menuSelectCount = 5;
 
-    int x;
-    while (x != 0)
+    int menuUserSelect;
+    while (menuUserSelect != 0)
     {
         printf("\n--------------------------------------------------\n");
         printf("\n");
@@ -63,32 +65,32 @@ int main()
         int invalidOption = 1;
         while (invalidOption == 1)
         {
-            scanf("%d", &x);
+            scanf("%d", &menuUserSelect);
 
-            if (x >= 0 && x <= menuSelectCount)
+            if (menuUserSelect >= 0 && menuUserSelect <= menuSelectCount)
             {
                 invalidOption = 0;
             } else
             {
-                printf("\n%d is invalid.\nInput valid option: ", x);
+                printf("\n%d is invalid.\nInput valid option: ", menuUserSelect);
             }
         }
-        if (x != 0) printf("Valid option selected! Proceeding...\n");
+        if (menuUserSelect != 0) printf("Valid option selected! Proceeding...\n");
 
         //proceeds to selected option - add new menu options here
-            if (x == 1)
+            if (menuUserSelect == 1)
             {
                 EngToAvv();
-            } else if (x == 2)
+            } else if (menuUserSelect == 2)
             {
                 AvvToEng();
-            } else if (x == 3)
+            } else if (menuUserSelect == 3)
             {
                 aboutAvv();
-            } else if (x == 4)
+            } else if (menuUserSelect == 4)
             {
                 aboutProgram();
-            } else if (x == 5)
+            } else if (menuUserSelect == 5)
             {
                 laboratory();
             }
@@ -117,6 +119,21 @@ void aboutAvv(void)
     //page 0
     printf("\n--------------------------------------------------\n");
     printf("\nABOUT AVVOCADOPNEAN\n");
+    printf("\n");
+
+    //generates avvocadopnean symbol table
+    //REMOVE THIS if you can get constant char array working
+    char avvSymbols[] = {'.', ',', '?', '!', '\''};
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 0; j < 5; j++)
+        {
+            printf("%c%c ", avvSymbols[i], avvSymbols[j]);
+        }
+        printf("\n");
+
+    }
+    printf("...");
     printf("\n");
     printf("Table of contents\n");
     printf("    1. History\n");
@@ -179,41 +196,77 @@ void aboutProgram(void)
 {
     printf("\n--------------------------------------------------\n");
     printf("\n");
-    printf("ABOUT THIS PROGRAM");
+    printf("ABOUT THIS PROGRAM\n");
     printf("\n");
     printf("The AVVOCADOPNEAN CIPHER TRANSLATOR program was written by Cameron Avvampato (me) in C.\n");
     printf("This program was intends to:\n");
     printf("    1. Translate Avvocadopnean and English to eachother\n");
     printf("    2. Read and Write .txt files with English/Avvocadopnean\n");
     printf("and:\n");
-    printf("    A. Be my first real program");
+    printf("    A. Be my first real program\n");
     printf("        that's heckin' cool yo\n");
-    printf("    B. Solidify my understanding of arrays and loops");
-    printf("        by generating the cipher using ASCII codes and loops");
+    printf("    B. Solidify my understanding of arrays and loops\n");
+    printf("        by generating the cipher using ASCII codes and loops\n");
 
     returnHome();
 }
 void laboratory(void)
 {
     printf("\n--------------------------------------------------\n");
-    printf("test this is where i test stuff\n");
+    printf("currently testing Eng -> Avv translator\n");
 
     char avvSymbols[] = {'.', ',', '?', '!', '\''};
 
-    //generates avvocadopnean symbol table
-    for (int i = 0; i < 5; i++)
-    {
-        for (int j = 0; j < 5; j++)
-        {
-            printf("%c%c ", avvSymbols[i], avvSymbols[j]);
-            //avvSet[i] =
-        }
-        printf("\n");
+    /***************************
+    ASCII char's int values:
+    A~Z = 65~90
+    a~z = 97~122
+    ****************************/
 
-    }
-    printf("...");
+    //takes user string
+    char EngAvvInput[101];
+    printf("Input expression to encrypt Eng -> Avv\n");
+    printf("\n");
+    printf("Up to 100 characters, only A-Z, a-z, numbers,\n");
+    printf("and punctuation and symbols . , ? ! '\n");
+    printf("\n");
+    printf("English to encrypt: ");
+    getchar(); //clears stream
+    scanf("%100[^\n]s", EngAvvInput); //black magic I don't understand
 
     printf("\n");
+    printf("%s\n", EngAvvInput);
+
+    printf("\n");
+    //converts string to cipher
+    int SymbolRow;
+    int SymbolColumn;
+    //must declare int to any number EXCEPT 0, or it skips for loop.
+    //I don't know why this works, but maybe nullChecker != '\0' thinks 0 == '\0'
+    int nullChecker = 1;
+    for (int i = 0; nullChecker != '\0'; i++)
+    {
+        if (EngAvvInput[i] == 32)
+        {
+            printf("- ");
+        } else
+        {
+            //explanation how this works written under "ENG->AVV EXPLAINED"
+            SymbolRow = (EngAvvInput[i] - 65) / 5;
+            SymbolColumn = ((EngAvvInput[i] - 65) % 5);
+            printf("%c%c ", avvSymbols[SymbolRow], avvSymbols[SymbolColumn]);
+        }
+        nullChecker = EngAvvInput[i + 1];
+    }
+    printf("\n");
+
+    //ENG->AVV EXPLAINED
+    //user types HELLO
+    //int values 72 69 76 76 79
+    //replaces those values with -64. / and % resulting int
+    //ex: 72 - 64 = 8. then divide 8 / 5 = 1, or 1st row (,), then 8 % 5 = 3, or 3rd column (?).
+    //takes these from avvSymbols[] and outputs to engAvvResult[], which increments each time and gets printed
+    //ingenious i know hehe >:)
 
     /*
     ASCII Codes for A~Z
@@ -232,63 +285,8 @@ void laboratory(void)
     printf("       90 is represented as ...\n");
     */
 
-    //test with only 1 word strings
-    char testEngAvvInput[100];
-    printf("Input word to encrypt Eng -> Avv: ");
-    scanf("%s", testEngAvvInput);
-
-    printf("\n");
-    printf("%s\n", testEngAvvInput);
-
-    int testSymbolRow;
-    int testSymbolColumn;
-    int x;
-
-    for(int i = 0; x != '\0'; i++)
-    //test loop for HELLO WORLD
-    //for(int i = 0; x < 11; i++)
-    {
-        if (testEngAvvInput[i] == 32)
-        {
-            printf(" ");
-        } else
-        {
-            testSymbolRow = (testEngAvvInput[i] - 65) / 5;
-            testSymbolColumn = ((testEngAvvInput[i] - 65) % 5);
-            printf("%c%c ", avvSymbols[testSymbolRow], avvSymbols[testSymbolColumn]);
-
-        }
-        x = testEngAvvInput[i + 1];
-    }
-
-
-
-    //user types HELLO
-    //sees int values 72 69 76 76 79
-    //replaces those values with -64. / and %
-    //ex: 72 - 64 = 8. then divide 8 / 5 = 1, or 1th row, then 8 % 5 = 3, or 3rd column. , ?
-    //takes these from avvSymbols[] and outputs to engAvvResult[], which increments each time and gets printed
-
-
-    //takes usertext input and displays it
-    /*
-    char userText[101];
-    getchar();
-    printf("Type a line of text here (up to 100 characters): ");
-    fgets(userText, sizeof(userText), stdin); // reads string
-    printf("Test: ");
-    puts(userText);
-    */
-
-    /***************************
-    ASCII char's int values:
-    A~Z = 65~90
-    a~z = 97~122
-    ****************************/
-
     returnHome();
-
-}\
+}
 
 //test functions - idk if i'm keeping these
 

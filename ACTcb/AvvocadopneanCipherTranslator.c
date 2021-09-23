@@ -30,9 +30,9 @@ TODO:
 int mainMenu(void);
 void EngToAvv(void);
 void AvvToEng(void);
-void aboutAvv(void);
+void aboutAvv(const char avvSymbols[]);
 void aboutProgram(void);
-void laboratory(void);
+void laboratory(const char avvSymbols[]);
 void returnHome(void);
 
 //if you can, try to make constant: char avvSymbols[] = {'.', ',', '?', '!', '\''};
@@ -40,10 +40,12 @@ void returnHome(void);
 
 int main()
 {
+    const char avvSymbols[] = {'.', ',', '?', '!', '\''};
+
     //change this to number of menu options desired
     int menuSelectCount = 5;
-
-    int menuUserSelect;
+    //put random number in menuUserSelect
+    int menuUserSelect = 1;
     while (menuUserSelect != 0)
     {
         printf("\n--------------------------------------------------\n");
@@ -86,13 +88,13 @@ int main()
                 AvvToEng();
             } else if (menuUserSelect == 3)
             {
-                aboutAvv();
+                aboutAvv(avvSymbols);
             } else if (menuUserSelect == 4)
             {
                 aboutProgram();
             } else if (menuUserSelect == 5)
             {
-                laboratory();
+                laboratory(avvSymbols);
             }
     }
 
@@ -114,7 +116,7 @@ void AvvToEng(void)
 }
 
 //explains how Avvocadopnean works
-void aboutAvv(void)
+void aboutAvv(const char avvSymbols[])
 {
     //page 0
     printf("\n--------------------------------------------------\n");
@@ -123,7 +125,6 @@ void aboutAvv(void)
 
     //generates avvocadopnean symbol table
     //REMOVE THIS if you can get constant char array working
-    char avvSymbols[] = {'.', ',', '?', '!', '\''};
     for (int i = 0; i < 5; i++)
     {
         for (int j = 0; j < 5; j++)
@@ -160,6 +161,7 @@ void aboutAvv(void)
 
     //page 2
     printf("\n--------------------------------------------------\n");
+    printf("\n");
     printf("USING AVVOCADOPNEAN\n");
     printf("\n");
     printf("To use standard script Avvocadopnean, lay out the symbols .,?!' to a 5x5 grid like so:\n");
@@ -210,12 +212,10 @@ void aboutProgram(void)
 
     returnHome();
 }
-void laboratory(void)
+void laboratory(const char avvSymbols[])
 {
     printf("\n--------------------------------------------------\n");
     printf("currently testing Eng -> Avv translator\n");
-
-    char avvSymbols[] = {'.', ',', '?', '!', '\''};
 
     /***************************
     ASCII char's int values:
@@ -263,7 +263,7 @@ void laboratory(void)
     //ENG->AVV EXPLAINED
     //user types HELLO
     //int values 72 69 76 76 79
-    //replaces those values with -64. / and % resulting int
+    //replaces those values with -65. / and % resulting int
     //ex: 72 - 64 = 8. then divide 8 / 5 = 1, or 1st row (,), then 8 % 5 = 3, or 3rd column (?).
     //takes these from avvSymbols[] and outputs to engAvvResult[], which increments each time and gets printed
     //ingenious i know hehe >:)

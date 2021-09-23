@@ -43,6 +43,7 @@ void AvvToEng(void);
 void aboutAvv(void);
 void aboutProgram(void);
 void laboratory(void);
+void returnHome(void);
 
 
 int main()
@@ -160,13 +161,13 @@ void aboutAvv(void)
     printf("         +-------------------+\n");
     printf("       . | A | B | C | D | E |\n");
     printf("         +-------------------+\n");
-    printf("       . | F | G | H | I | J |\n");
+    printf("       , | F | G | H | I | J |\n");
     printf("         +-------------------+\n");
-    printf("       . | K | L | M | N | O |\n");
+    printf("       ? | K | L | M | N | O |\n");
     printf("         +-------------------+\n");
-    printf("       . | P | Q | R | S | T |\n");
+    printf("       ! | P | Q | R | S | T |\n");
     printf("         +-------------------+\n");
-    printf("       . | U | V | W | X | Y |\n");
+    printf("       ' | U | V | W | X | Y |\n");
     printf("         +-------------------+\n");
     printf("        Z is represented as ...\n");
     printf("\n");
@@ -206,7 +207,96 @@ void laboratory(void)
 {
     printf("\n--------------------------------------------------\n");
     printf("test this is where i test stuff\n");
-}
+
+    char avvSymbols[] = {'.', ',', '?', '!', '\''};
+    //char avvSet[26][3];
+    //thoughts - it would assign the symbol pairs to an array as strings, then the translator would interpret the ASCII of userString to
+
+    //generates avvocadopnean symbol table
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 0; j < 5; j++)
+        {
+            printf("%c%c ", avvSymbols[i], avvSymbols[j]);
+            //avvSet[i] =
+        }
+        printf("\n");
+
+    }
+    printf("...");
+
+    printf("\n");
+
+    /*
+    printf("           .   ,   ?   !   '  \n");
+    printf("         +-------------------+\n");
+    printf("       . |65 |66 |67 |68 |69 |\n");
+    printf("         +-------------------+\n");
+    printf("       , |70 |71 |72 |73 |74 |\n");
+    printf("         +-------------------+\n");
+    printf("       ? |75 |76 |77 |78 |79 |\n");
+    printf("         +-------------------+\n");
+    printf("       ! |80 |81 |82 |83 |84 |\n");
+    printf("         +-------------------+\n");
+    printf("       ' |85 |86 |87 |88 |89 |\n");
+    printf("         +-------------------+\n");
+    printf("       90 is represented as ...\n");
+    */
+
+    //test with only 1 word strings
+    char testEngAvvInput[100];
+    printf("Input word to encrypt Eng -> Avv: ");
+    scanf("%s", testEngAvvInput);
+
+    printf("\n");
+    printf("%s\n", testEngAvvInput);
+
+    int testSymbolRow;
+    int testSymbolColumn;
+    int x;
+    for(int i = 0; x != '\0'; i++)
+    {
+        if (testEngAvvInput[i] == 32)
+        {
+            printf(" ");
+        } else
+        {
+            testSymbolRow = (testEngAvvInput[i] - 65) / 5;
+            testSymbolColumn = ((testEngAvvInput[i] - 65) % 5);
+            printf("%c%c ", avvSymbols[testSymbolRow], avvSymbols[testSymbolColumn]);
+
+        }
+        x = testEngAvvInput[i + 1];
+    }
+
+
+
+    //user types HELLO
+    //sees int values 72 69 76 76 79
+    //replaces those values with -64. / and %
+    //ex: 72 - 64 = 8. then divide 8 / 5 = 1, or 1th row, then 8 % 5 = 3, or 3rd column. , ?
+    //takes these from avvSymbols[] and outputs to engAvvResult[], which increments each time and gets printed
+
+
+    //takes usertext input and displays it
+    /*
+    char userText[101];
+    getchar();
+    printf("Type a line of text here (up to 100 characters): ");
+    fgets(userText, sizeof(userText), stdin); // reads string
+    printf("Test: ");
+    puts(userText);
+    */
+
+    /***************************
+    ASCII char's int values:
+    A~Z = 65~90
+    a~z = 97~122
+    ****************************/
+
+    returnHome();
+
+}\
 
 //test functions - idk if i'm keeping these
 
@@ -214,14 +304,14 @@ void laboratory(void)
 //don't delete this when you're done with it, just comment it out
 void returnHome(void)
 {
-    printf("Enter 0 to return to main menu: ");
+    printf("\nEnter 0 to return to main menu: ");
     int loopTrapper = 1;
     while (loopTrapper == 1)
     {
-        int returnHome;
-        scanf(" %d", &returnHome);
+        int userReturn;
+        scanf(" %d", &userReturn);
 
-        if (returnHome == 0)
+        if (userReturn == 0)
         {
             loopTrapper = 0;
             printf("Exiting to main menu...\n");

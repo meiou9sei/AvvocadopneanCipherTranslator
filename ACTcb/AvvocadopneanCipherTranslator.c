@@ -4,49 +4,64 @@
 //This program will translate between English and Avvocadopnean, with the standard A-Z, 0-9, and symbols . , ? ! '
 //later more symbols from Avvocadopnean will be included
 
-/*
-TODO:
-    1) MENU
-        make menu option expandable with int variable you can change. and make exit 0.
-    2) EngToAvv
-        add lowercase
-        try adding punctuation.
-        try adding numbers.
-        maybe try putting space between string text, so that it lines up with translation?
-    3) AvvToEng
-        reverse EngToAvv, basically. Try to modify EngToAvv functions so they're reusable here.
-    4) aboutAvv
-        flesh this out more. create page flipping function so you can
-            - go to table of contents
-            - go to next page
-            - go to last page
-                with keys probably n/ext and b/ack
-    x) add ability to read and write txt files with avvocadopnean
-    x) add spoken generator
-    x) write in README.md instructions on how to use program
-
-*/
-
 int mainMenu(void);
+//menu options
 void EngToAvv(void);
 void AvvToEng(void);
-void aboutAvv(const char avvSymbols[]);
+void aboutAvv(void);
 void aboutProgram(void);
-void laboratory(const char avvSymbols[]);
+void laboratory(void);
+//functions for navigation
 void returnHome(void);
+int get_int(void);
+int pageflipper(void);
 
-//if you can, try to make constant: char avvSymbols[] = {'.', ',', '?', '!', '\''};
 
+//global variable - more avvocadopnean symbols to be added as program updated
+const char AVVSYMBOLS[] = {'.', ',', '?', '!', '\''};
 
 int main()
 {
-    const char avvSymbols[] = {'.', ',', '?', '!', '\''};
+    int menuUserChoice = -1;
+    //proceeds to selected option - add new menu options here
+    while (menuUserChoice != 0)
+    {
+        //choose mode
+        menuUserChoice = mainMenu();
 
+        if (menuUserChoice == 1)
+        {
+            EngToAvv();
+        } else if (menuUserChoice == 2)
+        {
+            AvvToEng();
+        } else if (menuUserChoice == 3)
+        {
+            aboutAvv();
+        } else if (menuUserChoice == 4)
+        {
+            aboutProgram();
+        } else if (menuUserChoice == 5)
+        {
+            laboratory();
+        }
+    }
+    //exits program
+    printf("\nThanks for using! Goodbye.\n");
+
+    return 0;
+}
+
+int mainMenu(void)
+{
     //change this to number of menu options desired
-    int menuSelectCount = 5;
-    //put random number in menuUserSelect
-    int menuUserSelect = 1;
-    while (menuUserSelect != 0)
+    int menuOptions = 5;
+
+    // !!!!!!! if you're gonna add stuff, do a new branch and practice merging with git
+
+    //while loop for menu
+    int menuUserChoice = 1;
+    while (menuUserChoice != 0)
     {
         printf("\n--------------------------------------------------\n");
         printf("\n");
@@ -63,45 +78,27 @@ int main()
         printf("\n");
         printf("Select mode: ");
 
-        //checks if valid option (x = 1~5). if not, loops prompt
+        //checks if valid option (x = 1~menuOptions). if not, loops prompt
         int invalidOption = 1;
         while (invalidOption == 1)
         {
-            scanf("%d", &menuUserSelect);
+            scanf("%d", &menuUserChoice);
 
-            if (menuUserSelect >= 0 && menuUserSelect <= menuSelectCount)
+            if (menuUserChoice >= 0 && (menuUserChoice <= menuOptions) )
             {
-                invalidOption = 0;
+                return menuUserChoice;
             } else
             {
-                printf("\n%d is invalid.\nInput valid option: ", menuUserSelect);
+                printf("\n%d is invalid.\nInput valid option: ", menuUserChoice);
             }
         }
-        if (menuUserSelect != 0) printf("Valid option selected! Proceeding...\n");
-
-        //proceeds to selected option - add new menu options here
-            if (menuUserSelect == 1)
-            {
-                EngToAvv();
-            } else if (menuUserSelect == 2)
-            {
-                AvvToEng();
-            } else if (menuUserSelect == 3)
-            {
-                aboutAvv(avvSymbols);
-            } else if (menuUserSelect == 4)
-            {
-                aboutProgram();
-            } else if (menuUserSelect == 5)
-            {
-                laboratory(avvSymbols);
-            }
+        //exit menu and program
+        if (menuUserChoice != 0)
+        {
+            printf("Valid option selected! Proceeding...\n");
+            return 0;
+        }
     }
-
-    //exits program
-    printf("\nThanks for using! Goodbye.\n");
-
-    return 0;
 }
 
 void EngToAvv(void)
@@ -116,7 +113,7 @@ void AvvToEng(void)
 }
 
 //explains how Avvocadopnean works
-void aboutAvv(const char avvSymbols[])
+void aboutAvv(void)
 {
     //page 0
     printf("\n--------------------------------------------------\n");
@@ -129,7 +126,7 @@ void aboutAvv(const char avvSymbols[])
     {
         for (int j = 0; j < 5; j++)
         {
-            printf("%c%c ", avvSymbols[i], avvSymbols[j]);
+            printf("%c%c ", AVVSYMBOLS[i], AVVSYMBOLS[j]);
         }
         printf("\n");
 
@@ -212,16 +209,18 @@ void aboutProgram(void)
 
     returnHome();
 }
-void laboratory(const char avvSymbols[])
+void laboratory(void)
 {
     printf("\n--------------------------------------------------\n");
     printf("currently testing Eng -> Avv translator\n");
 
-    /***************************
+    /*
+    **************************
     ASCII char's int values:
     A~Z = 65~90
     a~z = 97~122
-    ****************************/
+    ***************************
+    */
 
     //takes user string
     char EngAvvInput[101];
@@ -260,10 +259,10 @@ void laboratory(const char avvSymbols[])
             //explanation how this works written under "ENG->AVV EXPLAINED"
             SymbolRow = (EngAvvInput[i] - 65) / 5;
             SymbolColumn = ((EngAvvInput[i] - 65) % 5);
-            printf("%c%c ", avvSymbols[SymbolRow], avvSymbols[SymbolColumn]);
-            avvOutput[iAvvOutput] = avvSymbols[SymbolRow];
+            printf("%c%c ", AVVSYMBOLS[SymbolRow], AVVSYMBOLS[SymbolColumn]);
+            avvOutput[iAvvOutput] = AVVSYMBOLS[SymbolRow];
             iAvvOutput++;
-            avvOutput[iAvvOutput] = avvSymbols[SymbolColumn];
+            avvOutput[iAvvOutput] = AVVSYMBOLS[SymbolColumn];
             iAvvOutput++;
             avvOutput[iAvvOutput] = ' ';
             iAvvOutput++;
@@ -312,7 +311,7 @@ void laboratory(const char avvSymbols[])
     //int values 72 69 76 76 79
     //replaces those values with -65. / and % resulting int
     //ex: 72 - 64 = 8. then divide 8 / 5 = 1, or 1st row (,), then 8 % 5 = 3, or 3rd column (?).
-    //takes these from avvSymbols[] and outputs to engAvvResult[], which increments each time and gets printed
+    //takes these from AVVSYMBOLS[] and outputs to engAvvResult[], which increments each time and gets printed
     //ingenious i know hehe >:)
     //AS FOR iAvvOutput AND avvOutput
     //created in case of printing out avvOutput txt file
@@ -337,8 +336,6 @@ void laboratory(const char avvSymbols[])
     returnHome();
 }
 
-//test functions - idk if i'm keeping these
-
 //function keeps user on page until 0 is entered - prevents auto-exiting of mode before I create something probably more sophisticated
 //don't delete this when you're done with it, just comment it out
 void returnHome(void)
@@ -359,6 +356,18 @@ void returnHome(void)
             printf("\nInvalid input. Enter 0 to return to main menu: ");
         }
     }
+}
+
+//for about modes, returns page user wishes to view
+int pageFlipper(void)
+{
+    return 0;
+}
+
+//sanitizes input and returns int
+int get_int(void)
+{
+    return 0;
 }
 
 

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 //Avvocadopnean Cipher Translator
 //This program will translate between English and Avvocadopnean, with the standard A-Z, 0-9, and symbols . , ? ! '
@@ -10,6 +11,7 @@ int mainMenu(void);
 //menu options
 void EngToAvv(void);
 void AvvToEng(void);
+void fileReader(void);
 void aboutAvv(void);
 void aboutProgram(void);
 void Settings(void);
@@ -186,12 +188,15 @@ void EngToAvv(void)
         //deals with space character
         if (EngAvvInput[i] == ' ')
         {
-            //printf("- ");
-            avvOutput[iAvvOutput] = '-';
-            iAvvOutput++;
+            //printf("- "), unless previous symbol was . , ? ! (eliminate redundant space symbol)
+            if ( (!(EngAvvInput[i] == '.' || EngAvvInput[i] == ',' || EngAvvInput[i] == '?' || EngAvvInput[i] == '!')) && (!(EngAvvInput[i-1] == '.' || EngAvvInput[i-1] == ',' || EngAvvInput[i-1] == '?' || EngAvvInput[i-1] == '!')) )
+            {
+                avvOutput[iAvvOutput] = '-';
+                iAvvOutput++;
+            }
             avvOutput[iAvvOutput] = ' ';
             iAvvOutput++;
-        } else if (EngAvvInput[i] == ('.' || ',' || '?' || '!' || '\'') )
+        } else if (EngAvvInput[i] == '.' || EngAvvInput[i] == ',' || EngAvvInput[i] == '?' || EngAvvInput[i] == '!' || EngAvvInput[i] == '\'') //deals with punctuation markers which end sentence - don't want redundant space
         {
             avvOutput[iAvvOutput] = EngAvvInput[i];
             iAvvOutput++;
@@ -228,9 +233,11 @@ void EngToAvv(void)
     printf("English:        ");
     for (int i = 0; i < strlen(EngAvvInput); i++)
     {
-        if (EngAvvInput[i] == ' ') //deals with space character
+        if ((EngAvvInput[i-1] == '.' || EngAvvInput[i-1] == ',' || EngAvvInput[i-1] == '?' || EngAvvInput[i-1] == '!') && EngAvvInput[i] == ' ')
+            printf(" ");
+        else if (EngAvvInput[i] == ' ')
             printf("  ");
-        else if (EngAvvInput[i] == ('.' || ',' || '?' || '!' || '\'') )
+        else if (EngAvvInput[i] == '.' || EngAvvInput[i] == ',' || EngAvvInput[i] == '?' || EngAvvInput[i] == '!' || EngAvvInput[i] == '\'')
             printf("%c ", EngAvvInput[i]);
         else if (EngAvvInput[i] == 'z') //deals with z
             printf("z   ");
@@ -242,13 +249,59 @@ void EngToAvv(void)
     //Avvocadopnean
     printf("Avvocadopnean:  %s\n", avvOutput); 
 
+    ///////////////
+    //FILE OUTPUT//
+    ///////////////
 
+    /*add ability to read and write txt files with avvocadopnean. 
+    probably do "a" instead of "w", w/ warning message
+     "can delete text after you take it out if you want" or something. 
+     also create said output.txt file if it doesn't exist*/
 
+    printf("\n");
+    printf("\n");
+    printf("Would you like to output a text file?: ");
+    printf("\n"); //RMVME this line once you write option in
+    //int getYesNo(); (0 = no, 1 = yes)
+    //then do if/else w/ 1 and 0
+
+    printf("(for the time being, automatically outputs file)\n");
+    
+    //file creation if doesn't exist
+
+    FILE *fpointer = fopen("avvOutput.txt", "a");
+    if (fpointer == NULL)
+    {
+        printf("Error: could not create text file\n");
+        return;
+    }
+
+    //obtains time
+    time_t currentTime;
+    time(&currentTime);
+
+    fprintf(fpointer, "%s", ctime(&currentTime));
+    fprintf(fpointer, "%s\n", EngAvvInput);
+    fprintf(fpointer, "%s\n", avvOutput);
+    fprintf(fpointer, "\n");
+
+    fclose(fpointer);
+    
+    printf("Output text successfully written to file avvOutput.txt\n");
+    printf("avvOutput.txt is located wherever you stored this program\n");
 }
 void AvvToEng(void)
 {
     printf("\n--------------------------------------------------\n");
     printf("test this is AvvToEng\n");
+}
+
+void fileReader(void)
+{
+    printf("\n--------------------------------------------------\n");
+    printf("Have a .txt file to read? Translate it here!\n");
+    printf("\n");
+    //have 1 Eng->Avv, 2 Avv->Eng, and 0 (exit) as options
 }
 
 //explains how Avvocadopnean works
@@ -268,10 +321,10 @@ void aboutAvv(void)
             printf("%c%c ", AVVSYMBOLS[i], AVVSYMBOLS[j]);
         }
         printf("\n");
-
     }
     printf("...");
     printf("\n");
+
     printf("Table of contents\n");
     printf("    1. History\n");
     printf("    2. Basic Avvocadopnean\n");

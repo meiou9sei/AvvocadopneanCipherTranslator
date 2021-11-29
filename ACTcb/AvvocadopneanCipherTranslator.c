@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 //Avvocadopnean Cipher Translator
 //This program will translate between English and Avvocadopnean, with the standard A-Z, 0-9, and symbols . , ? ! '
@@ -10,11 +12,13 @@ void EngToAvv(void);
 void AvvToEng(void);
 void aboutAvv(void);
 void aboutProgram(void);
-void laboratory(void);
+void Settings(void);
 //functions for navigation
 void returnHome(void);
-int get_int(void);
 int pageflipper(void);
+//functions for input
+void getString(int, char *);
+
 
 
 //global variable - more avvocadopnean symbols to be added as program updated
@@ -43,7 +47,7 @@ int main()
             aboutProgram();
         } else if (menuUserChoice == 5)
         {
-            laboratory();
+            Settings();
         }
     }
     //exits program
@@ -51,6 +55,10 @@ int main()
 
     return 0;
 }
+
+//////////////////
+//MENU FUNCTIONS//
+//////////////////
 
 int mainMenu(void)
 {
@@ -72,7 +80,7 @@ int mainMenu(void)
         printf("    2. Avvocadopnean -> English\n");
         printf("    3. About Avvocadopnean\n");
         printf("    4. About this program\n");
-        printf("    5. Laboratory\n");
+        printf("    5. Settings\n");
         printf("\n");
         printf("    0. Exit Program\n");
         printf("\n");
@@ -104,7 +112,138 @@ int mainMenu(void)
 void EngToAvv(void)
 {
     printf("\n--------------------------------------------------\n");
-    printf("test this is EngToAvv\n");
+    printf("English -> Avvocadopnean\n");
+
+    /*
+    **************************
+    ASCII char's int values:
+    A~Z = 65~90
+    a~z = 97~122
+    ***************************
+    */
+
+    //ENG->AVV EXPLAINED (uppercase example)
+    //user types HELLO
+    //int values 72 69 76 76 79
+    //replaces those values with -65. / and % resulting int
+    //ex: 72 - 64 = 8. then divide 8 / 5 = 1, or 1st row (,), then 8 % 5 = 3, or 3rd column (?).
+    //takes these from AVVSYMBOLS[] and outputs to engAvvResult[], which increments each time and gets printed
+    //ingenious i know hehe >:)
+    //AS FOR iAvvOutput AND avvOutput
+    //created in case of printing out avvOutput txt file
+
+    /*
+    ASCII Codes for A~Z
+    printf("           .   ,   ?   !   '  \n");
+    printf("         +-------------------+\n");
+    printf("       . |65 |66 |67 |68 |69 |\n");
+    printf("         +-------------------+\n");
+    printf("       , |70 |71 |72 |73 |74 |\n");
+    printf("         +-------------------+\n");
+    printf("       ? |75 |76 |77 |78 |79 |\n");
+    printf("         +-------------------+\n");
+    printf("       ! |80 |81 |82 |83 |84 |\n");
+    printf("         +-------------------+\n");
+    printf("       ' |85 |86 |87 |88 |89 |\n");
+    printf("         +-------------------+\n");
+    printf("       90 is represented as ...\n");
+    */
+
+    /////////////////////
+    //TAKES USER STRING//
+    /////////////////////
+
+    const int MAXINPUT = 250;
+
+    printf("Input expression to encrypt Eng -> Avv\n");
+    printf("Up to %d characters\n", MAXINPUT);
+    printf("\n");
+    printf("English to encrypt: ");
+    char EngAvvInput[MAXINPUT+1];
+    getString(MAXINPUT, EngAvvInput);
+    //printf("back in EngToAvv, your string is: %s\n", EngAvvInput);
+    //RMVME remove this when capitalization added afterwards: 
+    for(int i = 0; EngAvvInput[i]; i++)
+    {
+        EngAvvInput[i] = tolower(EngAvvInput[i]);
+    }
+
+    /////////////////////////
+    //ENCIPHERS USER STRING//
+    /////////////////////////
+
+    int SymbolRow;
+    int SymbolColumn;
+    //records to array in case of output
+    char avvOutput[MAXINPUT * 4];    
+    //i'm pretty sure *4 is enough space for any cipher, but not sure. I think z being ... (4 characters)
+    //is the longest possible symbol in avvocadopnean?
+
+    int nullChecker = 1;
+    int iAvvOutput = 0;
+    for (int i = 0; nullChecker != '\0'; i++)
+    {
+        //deals with space character
+        if (EngAvvInput[i] == ' ')
+        {
+            //printf("- ");
+            avvOutput[iAvvOutput] = '-';
+            iAvvOutput++;
+            avvOutput[iAvvOutput] = ' ';
+            iAvvOutput++;
+        } else if (EngAvvInput[i] == ('.' || ',' || '?' || '!' || '\'') )
+        {
+            avvOutput[iAvvOutput] = EngAvvInput[i];
+            iAvvOutput++;
+            avvOutput[iAvvOutput] = ' ';
+            iAvvOutput++;
+        } else if (EngAvvInput[i] == 'z') //deals with z character
+        {
+            //printf("... ");
+            for (int i = 0; i < 3; i++)
+            {
+                avvOutput[iAvvOutput] = '.'; 
+                iAvvOutput++;
+            }
+        } else //deals with a-y characters
+        {
+            SymbolRow = (EngAvvInput[i] - 97) / 5;
+            SymbolColumn = ((EngAvvInput[i] - 97) % 5);
+            //printf("%c%c ", AVVSYMBOLS[SymbolRow], AVVSYMBOLS[SymbolColumn]);
+            avvOutput[iAvvOutput] = AVVSYMBOLS[SymbolRow];
+            iAvvOutput++;
+            avvOutput[iAvvOutput] = AVVSYMBOLS[SymbolColumn];
+            iAvvOutput++;
+            avvOutput[iAvvOutput] = ' ';
+            iAvvOutput++;
+        }
+        nullChecker = EngAvvInput[i + 1];
+    }
+    avvOutput[iAvvOutput] = '\0';
+
+    //prints English and Avvocadopnean out
+    printf("\n");
+    printf("Comparison:\n");
+    //English (needs to artificially add spaces in)
+    printf("English:        ");
+    for (int i = 0; i < strlen(EngAvvInput); i++)
+    {
+        if (EngAvvInput[i] == ' ') //deals with space character
+            printf("  ");
+        else if (EngAvvInput[i] == ('.' || ',' || '?' || '!' || '\'') )
+            printf("%c ", EngAvvInput[i]);
+        else if (EngAvvInput[i] == 'z') //deals with z
+            printf("z   ");
+        else //deals with a-y
+            printf("%c  ", EngAvvInput[i]);
+    }
+    printf("\n");
+
+    //Avvocadopnean
+    printf("Avvocadopnean:  %s\n", avvOutput); 
+
+
+
 }
 void AvvToEng(void)
 {
@@ -209,132 +348,24 @@ void aboutProgram(void)
 
     returnHome();
 }
-void laboratory(void)
+
+void Settings(void)
 {
     printf("\n--------------------------------------------------\n");
-    printf("currently testing Eng -> Avv translator\n");
+    printf("beep boop\n");
 
-    /*
-    **************************
-    ASCII char's int values:
-    A~Z = 65~90
-    a~z = 97~122
-    ***************************
-    */
-
-    //takes user string
-    char EngAvvInput[101];
-    printf("Input expression to encrypt Eng -> Avv\n");
-    printf("\n");
-    printf("Up to 100 characters, only A-Z, a-z, numbers,\n");
-    printf("and punctuation and symbols . , ? ! '\n");
-    printf("\n");
-    printf("English to encrypt: ");
-    getchar(); //clears stream
-    scanf("%100[^\n]s", EngAvvInput); //black magic I don't understand
-
-    printf("\n");
-    printf("%s\n", EngAvvInput);
-
-    //converts string to cipher
-    int SymbolRow;
-    int SymbolColumn;
-    //records to array in case of output
-    char avvOutput[1000];
-    //must declare int to any number EXCEPT 0, or it skips for loop.
-    //I don't know why this works, but maybe nullChecker != '\0' thinks 0 == '\0'
-    int nullChecker = 1;
-    int iAvvOutput = 0;
-    for (int i = 0; nullChecker != '\0'; i++)
+    for (int i = 0; i < 5; i++)
     {
-        if (EngAvvInput[i] == 32)
-        {
-            printf("- ");
-            avvOutput[iAvvOutput] = '-';
-            iAvvOutput++;
-            avvOutput[iAvvOutput] = ' ';
-            iAvvOutput++;
-        } else
-        {
-            //explanation how this works written under "ENG->AVV EXPLAINED"
-            SymbolRow = (EngAvvInput[i] - 65) / 5;
-            SymbolColumn = ((EngAvvInput[i] - 65) % 5);
-            printf("%c%c ", AVVSYMBOLS[SymbolRow], AVVSYMBOLS[SymbolColumn]);
-            avvOutput[iAvvOutput] = AVVSYMBOLS[SymbolRow];
-            iAvvOutput++;
-            avvOutput[iAvvOutput] = AVVSYMBOLS[SymbolColumn];
-            iAvvOutput++;
-            avvOutput[iAvvOutput] = ' ';
-            iAvvOutput++;
-        }
-        nullChecker = EngAvvInput[i + 1];
-    }
-    printf("\n");
-
-    //output to .txt file
-    char printOrNay;
-    printf("\n");
-    printf("Would you like to write the translation to a .txt file?\n");
-    printf("!!!WARNING: THIS WILL OVERWRITE PREVIOUS TRANSLATIONS!!!\n");
-    printf("Additionally, you must restart the program after each output or this will not work\n");
-    printf("(I'll fix that in the future sorry)\n");
-    printf("\n");
-    printf("Y/N: ");
-    getchar();
-    scanf("%c", &printOrNay);
-
-    if (printOrNay == 'Y' || printOrNay == 'y')
-    {
-        FILE * fpointer = fopen("avvOutput.txt", "w");
-        int returnVal = fputs(avvOutput, fpointer);
-
-        if (returnVal >= 0)
-        {
-            printf("Successfully printed to avvOutput.txt!\n");
-            printf("ctrl+A/cmd+A and ctrl+C/cmd+C to copy the message.\n");
-            printf("ctrl+V/cmd+V to paste and send to friends!\n");
-        } else
-        {
-            printf("Failed\n");
-        }
-        fclose(fpointer);
-
-        //printf("Translation outputted to avvOutput.txt\n");
-
-    } else
-    {
-        printf("Alrighty then\n");
+        printf("%d character is %c\n", i, AVVSYMBOLS[i]);
     }
 
-    //ENG->AVV EXPLAINED
-    //user types HELLO
-    //int values 72 69 76 76 79
-    //replaces those values with -65. / and % resulting int
-    //ex: 72 - 64 = 8. then divide 8 / 5 = 1, or 1st row (,), then 8 % 5 = 3, or 3rd column (?).
-    //takes these from AVVSYMBOLS[] and outputs to engAvvResult[], which increments each time and gets printed
-    //ingenious i know hehe >:)
-    //AS FOR iAvvOutput AND avvOutput
-    //created in case of printing out avvOutput txt file
-
-    /*
-    ASCII Codes for A~Z
-    printf("           .   ,   ?   !   '  \n");
-    printf("         +-------------------+\n");
-    printf("       . |65 |66 |67 |68 |69 |\n");
-    printf("         +-------------------+\n");
-    printf("       , |70 |71 |72 |73 |74 |\n");
-    printf("         +-------------------+\n");
-    printf("       ? |75 |76 |77 |78 |79 |\n");
-    printf("         +-------------------+\n");
-    printf("       ! |80 |81 |82 |83 |84 |\n");
-    printf("         +-------------------+\n");
-    printf("       ' |85 |86 |87 |88 |89 |\n");
-    printf("         +-------------------+\n");
-    printf("       90 is represented as ...\n");
-    */
 
     returnHome();
 }
+
+//////////////////////
+//NON-MENU FUNCTIONS//
+//////////////////////
 
 //function keeps user on page until 0 is entered - prevents auto-exiting of mode before I create something probably more sophisticated
 //don't delete this when you're done with it, just comment it out
@@ -364,10 +395,22 @@ int pageFlipper(void)
     return 0;
 }
 
-//sanitizes input and returns int
-int get_int(void)
+//sanitizes input
+void getString(int inputLength, char * inputString)
 {
-    return 0;
+    //gets string - modeled from http://sekrit.de/webdocs/c/beginners-guide-away-from-scanf.html
+    char tmpStore[inputLength+1];
+    getchar();
+    if (fgets(tmpStore, inputLength, stdin))
+    {
+        tmpStore[strcspn(tmpStore, "\n")] = 0;
+        //printf("test message: %s\n", tmpStore);
+        strcpy(inputString, tmpStore);
+    } else
+    {
+        printf("error getting string\n");
+    }
 }
+
 
 

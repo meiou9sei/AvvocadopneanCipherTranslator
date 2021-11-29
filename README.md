@@ -11,6 +11,13 @@ I'll look into it later
 
 ## TODO:
 
+**temp TODO**
+- check why it breaks when use of punctuation?
+- add settings to TODO list
+  - would detect if settings file exists
+  - can write basic settings like whether to use binary or decimal, 
+  - whether to use default caps or lowercase when translating, etc.
+
 **new TODO list:**
 1) create and implement get_int function for use in menus so program doesn't crash upon entry of char
   - probably take in input a char, then convert it to int

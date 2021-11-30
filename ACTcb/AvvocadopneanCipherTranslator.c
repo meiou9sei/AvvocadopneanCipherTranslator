@@ -27,6 +27,7 @@ int getYesNo(void);
 
 //global variable - more avvocadopnean symbols to be added as program updated
 const char AVVSYMBOLS[] = {'.', ',', '?', '!', '\''};
+const char CLONESYMBOLS[] = {':', ';', '"'}; // replaced with '.', ',', '''
 
 int main()
 {
@@ -187,6 +188,22 @@ void EngToAvv(void)
     int iAvvOutput = 0;
     for (int i = 0; nullChecker != '\0'; i++)
     {
+        //if clone character detected, replaces it
+        if (strchr(CLONESYMBOLS, EngAvvInput[i]) != NULL)
+        {
+            switch(EngAvvInput[i])
+            {
+                case ':' :
+                    EngAvvInput[i] = '.';
+                    break;
+                case ';' :
+                    EngAvvInput[i] = ',';
+                    break;
+                case '"' :
+                    EngAvvInput[i] = '\'';
+                    break;
+            }
+        }
         //deals with space character
         if (EngAvvInput[i] == ' ')
         {
@@ -212,7 +229,9 @@ void EngToAvv(void)
                 avvOutput[iAvvOutput] = '.'; 
                 iAvvOutput++;
             }
-        } else //deals with a-y characters
+            avvOutput[iAvvOutput] = ' ';
+            iAvvOutput++;
+        } else if (isalpha(EngAvvInput[i]) != 0) //deals with a-y characters
         {
             SymbolRow = (EngAvvInput[i] - 97) / 5;
             SymbolColumn = ((EngAvvInput[i] - 97) % 5);
@@ -220,6 +239,34 @@ void EngToAvv(void)
             avvOutput[iAvvOutput] = AVVSYMBOLS[SymbolRow];
             iAvvOutput++;
             avvOutput[iAvvOutput] = AVVSYMBOLS[SymbolColumn];
+            iAvvOutput++;
+            avvOutput[iAvvOutput] = ' ';
+            iAvvOutput++;
+        } else if (isdigit(EngAvvInput[i]) != 0) //deals with numbers - converts to decimal for now
+        {
+            int temp = EngAvvInput[i];
+            //printf("temp is d: %d, c: %c\n", temp, temp);
+            temp -= 48; //corrects from ASCII digit value to int
+            if ( (temp >= 1) && (temp <= 5) )
+            {
+                avvOutput[iAvvOutput] = '*';
+                iAvvOutput++;
+                avvOutput[iAvvOutput] = AVVSYMBOLS[temp-1];
+            } else
+            {
+                avvOutput[iAvvOutput] = '^';
+                iAvvOutput++;
+                if (temp == 0)
+                    avvOutput[iAvvOutput] = '\'';
+                else
+                    avvOutput[iAvvOutput] = AVVSYMBOLS[temp-6];
+            }
+            iAvvOutput++;
+        }
+        
+        else //deals with any other characters, which aren't included in Avvocadopnean
+        {
+            avvOutput[iAvvOutput] = EngAvvInput[i];
             iAvvOutput++;
             avvOutput[iAvvOutput] = ' ';
             iAvvOutput++;
@@ -243,8 +290,10 @@ void EngToAvv(void)
             printf("%c ", EngAvvInput[i]);
         else if (EngAvvInput[i] == 'z') //deals with z
             printf("z   ");
-        else //deals with a-y
+        else if (isalpha(EngAvvInput[i]) != 0) //deals with a-y (z excluded above) and numbers
             printf("%c  ", EngAvvInput[i]);
+        else //deals with any other characters, which aren't included in Avvocadopnean
+            printf("%c ", EngAvvInput[i]);
     }
     printf("\n");
 

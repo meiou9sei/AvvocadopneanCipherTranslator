@@ -19,8 +19,6 @@ I'll look into it later
 **new TODO list:**
 1) create and implement getInt function for use in menus so program doesn't crash upon entry of char
   - probably take in input a char, then convert it to int
-  - maybe an fflush(stdin) for it after each scanf? (nah man I think you use getchar)
-  - also make getYesNo, and maybe getTrueFalse (though you can prob just use getInt w/ 1 0) for settings mode
 2)  Eng->Avv translator
   - add ability to switch between lowercase/uppercase with ^
   - try adding numbers

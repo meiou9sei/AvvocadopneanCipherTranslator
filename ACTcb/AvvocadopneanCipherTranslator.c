@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
 
 //Avvocadopnean Cipher Translator
 //This program will translate between English and Avvocadopnean, with the standard A-Z, 0-9, and symbols . , ? ! '
@@ -20,6 +21,7 @@ void returnHome(void);
 int pageflipper(void);
 //functions for input
 void getString(int, char *);
+int getYesNo(void);
 
 
 
@@ -253,42 +255,35 @@ void EngToAvv(void)
     //FILE OUTPUT//
     ///////////////
 
-    /*add ability to read and write txt files with avvocadopnean. 
-    probably do "a" instead of "w", w/ warning message
-     "can delete text after you take it out if you want" or something. 
-     also create said output.txt file if it doesn't exist*/
-
     printf("\n");
     printf("\n");
-    printf("Would you like to output a text file?: ");
-    printf("\n"); //RMVME this line once you write option in
-    //int getYesNo(); (0 = no, 1 = yes)
-    //then do if/else w/ 1 and 0
-
-    printf("(for the time being, automatically outputs file)\n");
+    printf("Would you like to output a text file? Y/N: ");
+    int printMe = getYesNo();
     
     //file creation if doesn't exist
-
-    FILE *fpointer = fopen("avvOutput.txt", "a");
-    if (fpointer == NULL)
+    if (printMe == 1)
     {
-        printf("Error: could not create text file\n");
-        return;
+        FILE *fpointer = fopen("avvOutput.txt", "a");
+        if (fpointer == NULL)
+        {
+            printf("Error: could not create text file\n");
+            return;
+        }
+
+        //obtains time
+        time_t currentTime;
+        time(&currentTime);
+
+        fprintf(fpointer, "%s", ctime(&currentTime));
+        fprintf(fpointer, "%s\n", EngAvvInput);
+        fprintf(fpointer, "%s\n", avvOutput);
+        fprintf(fpointer, "\n");
+
+        fclose(fpointer);
+        
+        printf("Output text successfully written to file avvOutput.txt\n");
+        printf("avvOutput.txt is located wherever you stored this program\n");
     }
-
-    //obtains time
-    time_t currentTime;
-    time(&currentTime);
-
-    fprintf(fpointer, "%s", ctime(&currentTime));
-    fprintf(fpointer, "%s\n", EngAvvInput);
-    fprintf(fpointer, "%s\n", avvOutput);
-    fprintf(fpointer, "\n");
-
-    fclose(fpointer);
-    
-    printf("Output text successfully written to file avvOutput.txt\n");
-    printf("avvOutput.txt is located wherever you stored this program\n");
 }
 void AvvToEng(void)
 {
@@ -465,5 +460,37 @@ void getString(int inputLength, char * inputString)
     }
 }
 
+int getYesNo(void)
+{
+    //gets string - modeled from http://sekrit.de/webdocs/c/beginners-guide-away-from-scanf.html
+    char tmpStore[4];
+    int error = 0;
+    while (error == 0)
+    {
+        //getchar();
+        
+        if (fgets(tmpStore, 4, stdin))
+        {
+            tmpStore[strcspn(tmpStore, "\n")] = 0;
+            //printf("test message1: %s\n", tmpStore);
 
+            //convert to lowercase
+            for (int i = 0; i < 4; i++)
+            {
+                tmpStore[i] = tolower(tmpStore[i]);
+            }
+            //printf("test message2: %s\n", tmpStore);
+
+            if (strcmp(tmpStore, "yes") == 0 || strcmp(tmpStore, "y") == 0)
+                return 1;
+            else if (strcmp (tmpStore, "no") == 0 || strcmp(tmpStore, "n") == 0)
+                return 0;
+        } else
+        {
+            printf("Error getting yes/no input\n");
+            error = 1;
+        }
+        printf("Invalid Input: Input Yes or No (Y/N): ");
+    }
+}
 

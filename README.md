@@ -17,15 +17,14 @@ I'll look into it later
   - probably take in input a char, then convert it to int
 2)  Eng->Avv translator
   - add ability to switch between lowercase/uppercase with ^
-  - implement hyphen use
 3) AvvToEng
         reverse EngToAvv, basically. Try to modify EngToAvv functions so they're reusable here.
         OR I think you can just 1) check if there's 2 (or 3 for z) symbols together 2) do x * 5 for first symbol, + x for second symbol to get ASCII int # for A-Z.
         //^lowercase I think, try implementing ^ v later
 4) Settings
   - would detect if settings file exists
-  - can write basic settings like whether to use binary or decimal,
-  - whether to use default caps or lowercase when translating, etc.
+  - can write basic settings like whether to use binary or decimal, (also add binary)
+  - whether to use default caps or lowercase when translating, etc. (also add upper/lowercase detection for Avv->Eng)
 5) aboutAvv
     flesh this out more. create page flipping function so you can
     redo it following the documents you have in person

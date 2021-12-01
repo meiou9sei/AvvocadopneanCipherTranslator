@@ -114,6 +114,7 @@ int mainMenu(void)
     }
 }
 
+//enciphers English to Avvocadopnean
 void EngToAvv(void)
 {
     printf("\n--------------------------------------------------\n");
@@ -167,7 +168,7 @@ void EngToAvv(void)
     char EngAvvInput[MAXINPUT+1];
     getString(MAXINPUT, EngAvvInput);
     //printf("back in EngToAvv, your string is: %s\n", EngAvvInput);
-    //RMVME remove this when capitalization added afterwards: 
+    //RMVME remove this when capitalization added afterwards:
     for(int i = 0; EngAvvInput[i]; i++)
     {
         EngAvvInput[i] = tolower(EngAvvInput[i]);
@@ -180,7 +181,7 @@ void EngToAvv(void)
     int SymbolRow;
     int SymbolColumn;
     //records to array in case of output
-    char avvOutput[MAXINPUT * 4];    
+    char avvOutput[MAXINPUT * 4];
     //i'm pretty sure *4 is enough space for any cipher, but not sure. I think z being ... (4 characters)
     //is the longest possible symbol in avvocadopnean?
 
@@ -207,7 +208,7 @@ void EngToAvv(void)
         //deals with space character
         if (EngAvvInput[i] == ' ')
         {
-            //printf("- "), unless previous symbol was . , ? ! (eliminate redundant space symbol)
+            //deals with space character - printf("- "), unless previous symbol was . , ? ! (eliminate redundant space symbol)
             if ( (!(EngAvvInput[i] == '.' || EngAvvInput[i] == ',' || EngAvvInput[i] == '?' || EngAvvInput[i] == '!')) && (!(EngAvvInput[i-1] == '.' || EngAvvInput[i-1] == ',' || EngAvvInput[i-1] == '?' || EngAvvInput[i-1] == '!')) )
             {
                 avvOutput[iAvvOutput] = '-';
@@ -215,8 +216,17 @@ void EngToAvv(void)
             }
             avvOutput[iAvvOutput] = ' ';
             iAvvOutput++;
-        } else if (EngAvvInput[i] == '.' || EngAvvInput[i] == ',' || EngAvvInput[i] == '?' || EngAvvInput[i] == '!' || EngAvvInput[i] == '\'') //deals with punctuation markers which end sentence - don't want redundant space
+        } //deals with punctuation markers which end sentence - don't want redundant space
+        else if (EngAvvInput[i] == '.' || EngAvvInput[i] == ',' || EngAvvInput[i] == '?' || EngAvvInput[i] == '!' || EngAvvInput[i] == '\'')
         {
+            avvOutput[iAvvOutput] = EngAvvInput[i];
+            iAvvOutput++;
+            avvOutput[iAvvOutput] = ' ';
+            iAvvOutput++;
+        } else if (EngAvvInput[i] == '-')
+        {
+            avvOutput[iAvvOutput] = EngAvvInput[i];
+            iAvvOutput++;
             avvOutput[iAvvOutput] = EngAvvInput[i];
             iAvvOutput++;
             avvOutput[iAvvOutput] = ' ';
@@ -226,7 +236,7 @@ void EngToAvv(void)
             //printf("... ");
             for (int i = 0; i < 3; i++)
             {
-                avvOutput[iAvvOutput] = '.'; 
+                avvOutput[iAvvOutput] = '.';
                 iAvvOutput++;
             }
             avvOutput[iAvvOutput] = ' ';
@@ -262,9 +272,7 @@ void EngToAvv(void)
                     avvOutput[iAvvOutput] = AVVSYMBOLS[temp-6];
             }
             iAvvOutput++;
-        }
-        
-        else //deals with any other characters, which aren't included in Avvocadopnean
+        } else //deals with any other characters, which aren't included in Avvocadopnean
         {
             avvOutput[iAvvOutput] = EngAvvInput[i];
             iAvvOutput++;
@@ -275,7 +283,9 @@ void EngToAvv(void)
     }
     avvOutput[iAvvOutput] = '\0';
 
-    //prints English and Avvocadopnean out
+    ////////////////////////////////////////
+    //prints English and Avvocadopnean out//
+    ////////////////////////////////////////
     printf("\n");
     printf("Comparison:\n");
     //English (needs to artificially add spaces in)
@@ -288,6 +298,8 @@ void EngToAvv(void)
             printf("  ");
         else if (EngAvvInput[i] == '.' || EngAvvInput[i] == ',' || EngAvvInput[i] == '?' || EngAvvInput[i] == '!' || EngAvvInput[i] == '\'')
             printf("%c ", EngAvvInput[i]);
+        else if (EngAvvInput[i] == '-')
+            printf("%c%c ", EngAvvInput[i]);
         else if (EngAvvInput[i] == 'z') //deals with z
             printf("z   ");
         else if (isalpha(EngAvvInput[i]) != 0) //deals with a-y (z excluded above) and numbers
@@ -298,7 +310,7 @@ void EngToAvv(void)
     printf("\n");
 
     //Avvocadopnean
-    printf("Avvocadopnean:  %s\n", avvOutput); 
+    printf("Avvocadopnean:  %s\n", avvOutput);
 
     ///////////////
     //FILE OUTPUT//
@@ -308,7 +320,7 @@ void EngToAvv(void)
     printf("\n");
     printf("Would you like to output a text file? Y/N: ");
     int printMe = getYesNo();
-    
+
     //file creation if doesn't exist
     if (printMe == 1)
     {
@@ -329,15 +341,17 @@ void EngToAvv(void)
         fprintf(fpointer, "\n");
 
         fclose(fpointer);
-        
+
         printf("Output text successfully written to file avvOutput.txt\n");
-        printf("avvOutput.txt is located wherever you stored this program\n");
+        printf("avvOutput.txt is located in the same folder/directory where this program is stored\n");
     }
 }
+
+//deciphers Avvocadopnean to English
 void AvvToEng(void)
 {
     printf("\n--------------------------------------------------\n");
-    printf("test this is AvvToEng\n");
+    printf("Avvocadopnean -> English\n");
 }
 
 void fileReader(void)
@@ -517,7 +531,7 @@ int getYesNo(void)
     while (error == 0)
     {
         //getchar();
-        
+
         if (fgets(tmpStore, 4, stdin))
         {
             tmpStore[strcspn(tmpStore, "\n")] = 0;

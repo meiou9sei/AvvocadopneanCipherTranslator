@@ -168,7 +168,7 @@ void EngToAvv(void)
     char EngAvvInput[MAXINPUT+1];
     getString(MAXINPUT, EngAvvInput);
     //printf("back in EngToAvv, your string is: %s\n", EngAvvInput);
-    //RMVME remove this when capitalization added afterwards:
+    //RMVME remove this when capitalization added afterwards: 
     for(int i = 0; EngAvvInput[i]; i++)
     {
         EngAvvInput[i] = tolower(EngAvvInput[i]);
@@ -181,7 +181,7 @@ void EngToAvv(void)
     int SymbolRow;
     int SymbolColumn;
     //records to array in case of output
-    char avvOutput[MAXINPUT * 4];
+    char avvOutput[MAXINPUT * 4];    
     //i'm pretty sure *4 is enough space for any cipher, but not sure. I think z being ... (4 characters)
     //is the longest possible symbol in avvocadopnean?
 
@@ -217,7 +217,7 @@ void EngToAvv(void)
             avvOutput[iAvvOutput] = ' ';
             iAvvOutput++;
         } //deals with punctuation markers which end sentence - don't want redundant space
-        else if (EngAvvInput[i] == '.' || EngAvvInput[i] == ',' || EngAvvInput[i] == '?' || EngAvvInput[i] == '!' || EngAvvInput[i] == '\'')
+        else if (EngAvvInput[i] == '.' || EngAvvInput[i] == ',' || EngAvvInput[i] == '?' || EngAvvInput[i] == '!' || EngAvvInput[i] == '\'') 
         {
             avvOutput[iAvvOutput] = EngAvvInput[i];
             iAvvOutput++;
@@ -236,7 +236,7 @@ void EngToAvv(void)
             //printf("... ");
             for (int i = 0; i < 3; i++)
             {
-                avvOutput[iAvvOutput] = '.';
+                avvOutput[iAvvOutput] = '.'; 
                 iAvvOutput++;
             }
             avvOutput[iAvvOutput] = ' ';
@@ -310,7 +310,7 @@ void EngToAvv(void)
     printf("\n");
 
     //Avvocadopnean
-    printf("Avvocadopnean:  %s\n", avvOutput);
+    printf("Avvocadopnean:  %s\n", avvOutput); 
 
     ///////////////
     //FILE OUTPUT//
@@ -320,7 +320,7 @@ void EngToAvv(void)
     printf("\n");
     printf("Would you like to output a text file? Y/N: ");
     int printMe = getYesNo();
-
+    
     //file creation if doesn't exist
     if (printMe == 1)
     {
@@ -341,7 +341,7 @@ void EngToAvv(void)
         fprintf(fpointer, "\n");
 
         fclose(fpointer);
-
+        
         printf("Output text successfully written to file avvOutput.txt\n");
         printf("avvOutput.txt is located in the same folder/directory where this program is stored\n");
     }
@@ -352,6 +352,101 @@ void AvvToEng(void)
 {
     printf("\n--------------------------------------------------\n");
     printf("Avvocadopnean -> English\n");
+
+/*
+    //AVV->ENG EXPLAINED (uppercase example)
+    //user types ,? .' ?, ?, ?'
+    //take ,?
+    //1) confirms is 2 letters (followed by space) and not a number (would start with ^ or *) nor hyphen (--)
+    //2) index of , in AVVSYMBOLS[] is 1, ? is 2.
+    //       multiply first by 5, then add second, then add ASCII 65 for A
+    //       (1 * 5) + 2 + 65 = 72, or ASCII value for H 
+    //3) any groupings of 1 characters are left alone
+    //       any groupings of 3 characters are deemed uppercase/lowercase (starts with ^ or *) or z (...)
+
+    /////////////////////
+    //TAKES USER STRING//
+    /////////////////////
+
+    const int MAXINPUT = 1000;
+
+    printf("Input expression to decrypt Avv -> Eng\n");
+    printf("Up to %d characters\n", MAXINPUT);
+    printf("\n");
+    printf("Avvocadopnean to encrypt: ");
+    char AvvEngInput[MAXINPUT+1];
+    getString(MAXINPUT, AvvEngInput);
+    //printf("back in AvvToEng, your string is: %s\n", AvvEngInput);
+
+    /////////////////////////
+    //DECIPHERS USER STRING//
+    /////////////////////////
+
+    int SymbolRow;
+    int SymbolColumn;
+    //records to array in case of output
+    char engOutput[MAXINPUT/2 +1];    
+    //Eng is at least half the size of Avv if only punctuations are typed in, probably much shorter
+    int nullChecker = 1;
+    int iAvvOutput = 0;
+
+    for (int i = 0; nullChecker != '\0'; i++)
+    {
+        //first if/else deal with z
+        if ( (AvvEngInput[i] == '.') && (AvvEngInput[i+1] == '.') && (AvvEngInput[i+2] == '.') ) //lowercase z
+        {
+
+        }
+        else if ((AvvEngInput[i+1] == '.') && (AvvEngInput[i+2] == '.') && (AvvEngInput[i+3] == '.')) //uppercase Z
+        {
+
+        }
+
+        //then move onto the rest of characters
+        //a-y, or number if start w/ ^ * OR IF 3 letter (upper/lowercase specifier), uses parts of 2 letter function
+        else if ( ((AvvEngInput[i+1] != ' ') && (AvvEngInput[i+2] == ' ')) || ((AvvEngInput[i+1] != ' ') && (AvvEngInput[i+2] != ' ') && (AvvEngInput[i+3] == ' ')) ) 
+        {
+            if ((AvvEngInput[i+1] != ' ') && (AvvEngInput[i+2] != ' ') && (AvvEngInput[i+3] == ' ')) //3 letter case specifier realm
+            {
+
+            }
+            ///////////////////////////////////////////////////
+
+            //code to decipher 2 letter here
+
+            ///////////////////////////////////////////////////
+
+            if ((AvvEngInput[i+1] != ' ') && (AvvEngInput[i+2] != ' ') && (AvvEngInput[i+3] == ' '))
+            {
+                //i think you need to do a last bit of code here... but idk. check later and delete if this part unneeded
+            }
+
+        } else if (AvvEngInput[i+1] == ' ') //special symbol or punctuation, left alone
+        {
+            //translate as is
+        } else if (AvvEngInput[i] == ' ') //spaces, translate as is
+        {
+
+        } 
+        
+        //if not avvocadopnean, comes here
+        else
+        {
+            //deal with nonAvvocadopnean garbage here
+        }
+        nullChecker = AvvEngInput[i + 1];
+    }
+    engOutput[iAvvOutput] = '\0';
+
+    ////////////////////////////////////////
+    //prints English and Avvocadopnean out//
+    ////////////////////////////////////////
+
+    ///////////////
+    //FILE OUTPUT//
+    ///////////////
+
+*/
 }
 
 void fileReader(void)
@@ -531,7 +626,7 @@ int getYesNo(void)
     while (error == 0)
     {
         //getchar();
-
+        
         if (fgets(tmpStore, 4, stdin))
         {
             tmpStore[strcspn(tmpStore, "\n")] = 0;

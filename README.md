@@ -1,7 +1,7 @@
 # AvvocadopneanCipherTranslator
 Translates Avvocadopnean Cipher to English and vice versa. Personal project to test out my c skillz
 
-Currently only Eng->Avv translation is functional, Avv->Eng will come soon
+Currently only Eng->Avv translation is functional, Avv->Eng will come soon (working on that feature branch atm)
 
 ## How to install and use
 I think you can just use a C compiler (like gcc) with codeblocks or VSCode and run the main AvvocadopneanCipherTranslator.c ...? I'm new so don't know, you can probably google it. I'm pretty sure you just need the .c file, or can run AvvocadopneanCipherTranslator file itself through terminal?

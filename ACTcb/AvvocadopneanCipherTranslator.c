@@ -22,6 +22,8 @@ int pageflipper(void);
 //functions for input
 void getString(int, char *);
 int getYesNo(void);
+//file output
+void fileOutput(char *, char *, char *);
 
 
 
@@ -161,14 +163,14 @@ void EngToAvv(void)
 
     const int MAXINPUT = 250;
 
-    printf("Input expression to encrypt Eng -> Avv\n");
+    printf("Input expression to encipher Eng -> Avv\n");
     printf("Up to %d characters\n", MAXINPUT);
     printf("\n");
-    printf("English to encrypt: ");
+    printf("English to encipher: ");
     char EngAvvInput[MAXINPUT+1];
     getString(MAXINPUT, EngAvvInput);
     //printf("back in EngToAvv, your string is: %s\n", EngAvvInput);
-    //RMVME remove this when capitalization added afterwards: 
+    //RMVME remove this when capitalization added afterwards:
     for(int i = 0; EngAvvInput[i]; i++)
     {
         EngAvvInput[i] = tolower(EngAvvInput[i]);
@@ -181,7 +183,7 @@ void EngToAvv(void)
     int SymbolRow;
     int SymbolColumn;
     //records to array in case of output
-    char avvOutput[MAXINPUT * 4];    
+    char avvOutput[MAXINPUT * 4];
     //i'm pretty sure *4 is enough space for any cipher, but not sure. I think z being ... (4 characters)
     //is the longest possible symbol in avvocadopnean?
 
@@ -189,6 +191,7 @@ void EngToAvv(void)
     int iAvvOutput = 0;
     for (int i = 0; nullChecker != '\0'; i++)
     {
+        //printf("enter doom :)\n");
         //if clone character detected, replaces it
         if (strchr(CLONESYMBOLS, EngAvvInput[i]) != NULL)
         {
@@ -217,7 +220,7 @@ void EngToAvv(void)
             avvOutput[iAvvOutput] = ' ';
             iAvvOutput++;
         } //deals with punctuation markers which end sentence - don't want redundant space
-        else if (EngAvvInput[i] == '.' || EngAvvInput[i] == ',' || EngAvvInput[i] == '?' || EngAvvInput[i] == '!' || EngAvvInput[i] == '\'') 
+        else if (EngAvvInput[i] == '.' || EngAvvInput[i] == ',' || EngAvvInput[i] == '?' || EngAvvInput[i] == '!' || EngAvvInput[i] == '\'')
         {
             avvOutput[iAvvOutput] = EngAvvInput[i];
             iAvvOutput++;
@@ -236,7 +239,7 @@ void EngToAvv(void)
             //printf("... ");
             for (int i = 0; i < 3; i++)
             {
-                avvOutput[iAvvOutput] = '.'; 
+                avvOutput[iAvvOutput] = '.';
                 iAvvOutput++;
             }
             avvOutput[iAvvOutput] = ' ';
@@ -280,6 +283,7 @@ void EngToAvv(void)
             iAvvOutput++;
         }
         nullChecker = EngAvvInput[i + 1];
+        //printf("nullChecker is %c\n", nullChecker);
     }
     avvOutput[iAvvOutput] = '\0';
 
@@ -310,7 +314,7 @@ void EngToAvv(void)
     printf("\n");
 
     //Avvocadopnean
-    printf("Avvocadopnean:  %s\n", avvOutput); 
+    printf("Avvocadopnean:  %s\n", avvOutput);
 
     ///////////////
     //FILE OUTPUT//
@@ -319,32 +323,12 @@ void EngToAvv(void)
     printf("\n");
     printf("\n");
     printf("Would you like to output a text file? Y/N: ");
-    int printMe = getYesNo();
-    
-    //file creation if doesn't exist
-    if (printMe == 1)
-    {
-        FILE *fpointer = fopen("avvOutput.txt", "a");
-        if (fpointer == NULL)
-        {
-            printf("Error: could not create text file\n");
-            return;
-        }
+    //create avvoutput as a string
+    char fileName[] = "avvToEng";
+    if (getYesNo() == 1)
+        fileOutput(fileName, EngAvvInput, avvOutput);
 
-        //obtains time
-        time_t currentTime;
-        time(&currentTime);
-
-        fprintf(fpointer, "%s", ctime(&currentTime));
-        fprintf(fpointer, "%s\n", EngAvvInput);
-        fprintf(fpointer, "%s\n", avvOutput);
-        fprintf(fpointer, "\n");
-
-        fclose(fpointer);
-        
-        printf("Output text successfully written to file avvOutput.txt\n");
-        printf("avvOutput.txt is located in the same folder/directory where this program is stored\n");
-    }
+    returnHome();
 }
 
 //deciphers Avvocadopnean to English
@@ -353,14 +337,17 @@ void AvvToEng(void)
     printf("\n--------------------------------------------------\n");
     printf("Avvocadopnean -> English\n");
 
-/*
+    printf("\n");
+    printf("WARNING: This mode is buggy. Some texts will not decipher properly\n");
+    printf("\n");
+
     //AVV->ENG EXPLAINED (uppercase example)
     //user types ,? .' ?, ?, ?'
     //take ,?
     //1) confirms is 2 letters (followed by space) and not a number (would start with ^ or *) nor hyphen (--)
     //2) index of , in AVVSYMBOLS[] is 1, ? is 2.
     //       multiply first by 5, then add second, then add ASCII 65 for A
-    //       (1 * 5) + 2 + 65 = 72, or ASCII value for H 
+    //       (1 * 5) + 2 + 65 = 72, or ASCII value for H
     //3) any groupings of 1 characters are left alone
     //       any groupings of 3 characters are deemed uppercase/lowercase (starts with ^ or *) or z (...)
 
@@ -370,10 +357,10 @@ void AvvToEng(void)
 
     const int MAXINPUT = 1000;
 
-    printf("Input expression to decrypt Avv -> Eng\n");
+    printf("Input expression to decipher Avv -> Eng\n");
     printf("Up to %d characters\n", MAXINPUT);
     printf("\n");
-    printf("Avvocadopnean to encrypt: ");
+    printf("Avvocadopnean to decipher: ");
     char AvvEngInput[MAXINPUT+1];
     getString(MAXINPUT, AvvEngInput);
     //printf("back in AvvToEng, your string is: %s\n", AvvEngInput);
@@ -385,68 +372,173 @@ void AvvToEng(void)
     int SymbolRow;
     int SymbolColumn;
     //records to array in case of output
-    char engOutput[MAXINPUT/2 +1];    
+    char engOutput[MAXINPUT/2 +1];
     //Eng is at least half the size of Avv if only punctuations are typed in, probably much shorter
     int nullChecker = 1;
-    int iAvvOutput = 0;
+    int iEngOutput = 0;
 
-    for (int i = 0; nullChecker != '\0'; i++)
+    //printf("test message - you reached me\n");
+
+    int i = 0; //tracks which element of AvvEngInput on
+
+    int testWhile = 0;
+    while (nullChecker != '\0') //not a for loop like Eng->Avv, because in E->A each char expands from 1 to multiple, but in A->E a group of 1~4 chars group into 1
     {
+        //printf("entered while loop number %d\n", testWhile);
+        testWhile++;
+
+        int letterCase = 0;
         //first if/else deal with z
-        if ( (AvvEngInput[i] == '.') && (AvvEngInput[i+1] == '.') && (AvvEngInput[i+2] == '.') ) //lowercase z
+        if (AvvEngInput[i] == '-') //lmao you had this as ' ' and were confused why you kept getting spaces in engOutput
         {
-
+            //printf("entered '-' zone\n");
+            engOutput[iEngOutput] = ' ';
+            iEngOutput++;
+            i++;
+        } else if (AvvEngInput[i] == ' ')
+        {
+            //printf("entered ' ' zone\n");
+            i++;
+        }  else if ( ( (AvvEngInput[i] == '.') && (AvvEngInput[i+1] == '.') && (AvvEngInput[i+2] == '.') ) || ( (AvvEngInput[i] == '*') && (AvvEngInput[i+1] == '.') && (AvvEngInput[i+2] == '.') && (AvvEngInput[i+3] == '.') ) ) //lowercase z
+        {
+            engOutput[iEngOutput] = 'z';
+            iEngOutput++;
+            i += 3;
         }
-        else if ((AvvEngInput[i+1] == '.') && (AvvEngInput[i+2] == '.') && (AvvEngInput[i+3] == '.')) //uppercase Z
+        else if ((AvvEngInput[i] == '^') && (AvvEngInput[i+1] == '.') && (AvvEngInput[i+2] == '.') && (AvvEngInput[i+3] == '.')) //uppercase Z
         {
-
+            engOutput[iEngOutput] = 'Z';
+            iEngOutput++;
+            i += 4;
         }
 
         //then move onto the rest of characters
         //a-y, or number if start w/ ^ * OR IF 3 letter (upper/lowercase specifier), uses parts of 2 letter function
-        else if ( ((AvvEngInput[i+1] != ' ') && (AvvEngInput[i+2] == ' ')) || ((AvvEngInput[i+1] != ' ') && (AvvEngInput[i+2] != ' ') && (AvvEngInput[i+3] == ' ')) ) 
+        else if ( ((AvvEngInput[i+1] != ' ') && ( (AvvEngInput[i+2] == ' ') || (AvvEngInput[i+2] == '\0') ) ) || ((AvvEngInput[i+1] != ' ') && (AvvEngInput[i+2] != ' ') && ( (AvvEngInput[i+3] == ' ') || (AvvEngInput[i+3] == '\0') ) ) )
         {
-            if ((AvvEngInput[i+1] != ' ') && (AvvEngInput[i+2] != ' ') && (AvvEngInput[i+3] == ' ')) //3 letter case specifier realm
+            if ((AvvEngInput[i+1] != ' ') && (AvvEngInput[i+2] != ' ') && (AvvEngInput[i+2] != '\0') && (AvvEngInput[i+3] == ' ')) //3 letter case specifier realm
             {
+                if (AvvEngInput[i] == '^')
+                    letterCase = 65;
+                else if (AvvEngInput[i] == '*')
+                    letterCase = 97;
 
+                i++;
+            } else
+            {
+                letterCase = 97;
             }
-            ///////////////////////////////////////////////////
-
             //code to decipher 2 letter here
-
-            ///////////////////////////////////////////////////
-
-            if ((AvvEngInput[i+1] != ' ') && (AvvEngInput[i+2] != ' ') && (AvvEngInput[i+3] == ' '))
+            //printf("code to decipher 2 letters here\n");
+            //finds row
+            for (int j = 0; j < 5; j++)
             {
-                //i think you need to do a last bit of code here... but idk. check later and delete if this part unneeded
+                /*
+                printf("entered j loop\n");
+                printf("j is %d\n", j);
+                printf("AvvEngInput[i] is: %c, AVVSYMBOLS[j] is: %c\n", AvvEngInput[i], AVVSYMBOLS[j]);
+                */
+                if (AvvEngInput[i] == AVVSYMBOLS[j])
+                {
+                    //printf("two are equal\n");
+                    SymbolRow = j;
+                    //printf("SymbolRow is %d, j is %d\n", SymbolRow, j);
+                }
             }
+            //printf("SymbolRow is %d\n\n\n", SymbolRow);
+            //SymbolRow = strchr(AVVSYMBOLS, AvvEngInput[i]); <- this doesn't work, strchr returns a pointer to the char in AVVSYMBOLS, not an int for what element it was
+            i++;
+            //finds column
+            for (int k = 0; k < 5; k++)
+            {
+                /*
+                printf("entered k loop\n");
+                printf("k is %d\n", k);
+                printf("AvvEngInput[i] is: %c, AVVSYMBOLS[k] is: %c\n", AvvEngInput[i], AVVSYMBOLS[k]);
+                */
+                if (AvvEngInput[i] == AVVSYMBOLS[k])
+                {
+                    //printf("two are equal\n");
+                    SymbolColumn = k;
+                    //printf("SymbolColumn is %d, k is %d\n", SymbolColumn, k);
+                }
+            }
+            //printf("SymbolColumn is %d\n\n\n", SymbolColumn);
+            //SymbolColumn = strchr(AVVSYMBOLS, AvvEngInput[i]); <- this doesn't work, strchr returns a pointer to the char in AVVSYMBOLS, not an int for what element it was
+            i++;
 
-        } else if (AvvEngInput[i+1] == ' ') //special symbol or punctuation, left alone
-        {
-            //translate as is
-        } else if (AvvEngInput[i] == ' ') //spaces, translate as is
-        {
+            //printf("letterCase is %d\n", letterCase);
+            //printf("2 letter digit is: %d\n", ((SymbolRow * 5) + SymbolColumn + letterCase));
 
-        } 
-        
+            //adds up numbers and stores character
+            engOutput[iEngOutput] = ((SymbolRow * 5) + SymbolColumn + letterCase);
+            //printf("2 letter output is: %c\n", engOutput[iEngOutput]);
+            iEngOutput++;
+        }
         //if not avvocadopnean, comes here
+        //also special symbol/punctuation are translated as is
         else
         {
-            //deal with nonAvvocadopnean garbage here
+            engOutput[iEngOutput] = AvvEngInput[i];
+            iEngOutput++;
+            i++;
         }
-        nullChecker = AvvEngInput[i + 1];
+        nullChecker = AvvEngInput[i];
+        //printf("nullChecker is %c\n", nullChecker);
     }
-    engOutput[iAvvOutput] = '\0';
+    engOutput[iEngOutput] = '\0';
 
     ////////////////////////////////////////
     //prints English and Avvocadopnean out//
     ////////////////////////////////////////
 
+    //printf("tests: %s !!! %s\n", AvvEngInput, engOutput);
+
+    printf("\n");
+    printf("Comparison:\n");
+    //Avvocadopnean
+    printf("Avvocadopnean:  %s\n", AvvEngInput);
+
+    //bellow chunk copied from Eng->Avv
+    //English (needs to artificially add spaces in)
+    printf("English:        ");
+    for (int i = 0; i < strlen(engOutput); i++)
+    {
+        if ((engOutput[i-1] == '.' || engOutput[i-1] == ',' || engOutput[i-1] == '?' || engOutput[i-1] == '!') && engOutput[i] == ' ')
+            printf(" ");
+        else if (engOutput[i] == ' ')
+            printf("  ");
+        else if (engOutput[i] == '.' || engOutput[i] == ',' || engOutput[i] == '?' || engOutput[i] == '!' || engOutput[i] == '\'')
+            printf("%c ", engOutput[i]);
+        else if (engOutput[i] == '-')
+            printf("%c%c ", engOutput[i]);
+        else if (engOutput[i] == 'z') //deals with z
+            printf("z   ");
+        else if (isalpha(engOutput[i]) != 0) //deals with a-y (z excluded above) and numbers
+            printf("%c  ", engOutput[i]);
+        else //deals with any other characters, which aren't included in Avvocadopnean
+            printf("%c ", engOutput[i]);
+    }
+    printf("\n");
+
+
+    //English
+    printf("\n");
+    printf("Output: %s", engOutput);
+
     ///////////////
     //FILE OUTPUT//
     ///////////////
 
-*/
+    printf("\n");
+    printf("\n");
+    printf("Would you like to output a text file? Y/N: ");
+    //create avvoutput as a string
+    char fileName[] = "engToAvv";
+    if (getYesNo() == 1)
+        fileOutput(fileName, AvvEngInput, engOutput);
+
+    returnHome();
 }
 
 void fileReader(void)
@@ -523,7 +615,7 @@ void aboutAvv(void)
     printf("        Z is represented as ...\n");
     printf("\n");
     printf("\n");
-    printf("To encrypt a letter, first use the horizontal row then the vertical column.\n");
+    printf("To encipher a letter, first use the horizontal row then the vertical column.\n");
     printf("Words are separated by a -\n");
     printf("\n");
     printf("For example:\n");
@@ -626,7 +718,7 @@ int getYesNo(void)
     while (error == 0)
     {
         //getchar();
-        
+
         if (fgets(tmpStore, 4, stdin))
         {
             tmpStore[strcspn(tmpStore, "\n")] = 0;
@@ -652,3 +744,33 @@ int getYesNo(void)
     }
 }
 
+
+///////////////
+//FILE OUTPUT//
+///////////////
+void fileOutput(char * fileName, char * originalText, char * cipherText)
+{
+    strcat(fileName, ".txt");
+
+    //file creation if doesn't exist
+    FILE *fpointer = fopen(fileName, "a");
+    if (fpointer == NULL)
+    {
+        printf("Error: could not create text file\n");
+        return;
+    }
+
+    //obtains time
+    time_t currentTime;
+    time(&currentTime);
+
+    fprintf(fpointer, "%s", ctime(&currentTime));
+    fprintf(fpointer, "%s\n", originalText);
+    fprintf(fpointer, "%s\n", cipherText);
+    fprintf(fpointer, "\n");
+
+    fclose(fpointer);
+
+    printf("Output text successfully written to file %s\n", fileName);
+    printf("%s is located in the same folder/directory where this program is stored\n", fileName);
+}

@@ -1,18 +1,15 @@
 # AvvocadopneanCipherTranslator
-Translates Avvocadopnean Cipher to English and vice versa. Personal project to test out my c skillz
+Translates Avvocadopnean Cipher to English and vice versa. Personal project
 
 Currently only Eng->Avv translation is functional, Avv->Eng will come soon
 
 ## How to install and use
-I think you can just use a C compiler (like gcc) with codeblocks or VSCode and run the main AvvocadopneanCipherTranslator.c ...? I'm new so don't know, you can probably google it. I'm pretty sure you just need the .c file, or can run AvvocadopneanCipherTranslator file itself through terminal?
-
-I'll look into it later
+not sure. I'll look into it later. pretty sure you can just compile the .c file and it'll work though
 
 ## TODO:
+first and foremost: fix Avv->eng so it's not so buggy
 
-
-
-**new TODO list:**
+0) replace aboutAvv or aboutProgram with fileReader
 1) create and implement getInt function for use in menus so program doesn't crash upon entry of char
   - probably take in input a char, then convert it to int
 2)  Eng->Avv translator

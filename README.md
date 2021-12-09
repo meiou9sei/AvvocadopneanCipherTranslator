@@ -1,7 +1,7 @@
 # AvvocadopneanCipherTranslator
 Translates Avvocadopnean Cipher to English and vice versa. Personal project
 
-Currently only Eng->Avv translation is functional, Avv->Eng will come soon (working on that feature branch atm)
+Currently Avv->Eng is a bit buggy, but should work for simple messages
 
 ## How to install and use
 not sure. I'll look into it later. pretty sure you can just compile the .c file and it'll work though

@@ -4,6 +4,8 @@
 #include <time.h>
 #include <ctype.h>
 
+//test comments
+
 //Avvocadopnean Cipher Translator
 //This program will translate between English and Avvocadopnean, with the standard A-Z, 0-9, and symbols . , ? ! '
 //later more symbols from Avvocadopnean will be included
@@ -170,7 +172,7 @@ void EngToAvv(void)
     char EngAvvInput[MAXINPUT+1];
     getString(MAXINPUT, EngAvvInput);
     //printf("back in EngToAvv, your string is: %s\n", EngAvvInput);
-    //RMVME remove this when capitalization added afterwards: 
+    //RMVME remove this when capitalization added afterwards:
     for(int i = 0; EngAvvInput[i]; i++)
     {
         EngAvvInput[i] = tolower(EngAvvInput[i]);
@@ -183,7 +185,7 @@ void EngToAvv(void)
     int SymbolRow;
     int SymbolColumn;
     //records to array in case of output
-    char avvOutput[MAXINPUT * 4];    
+    char avvOutput[MAXINPUT * 4];
     //i'm pretty sure *4 is enough space for any cipher, but not sure. I think z being ... (4 characters)
     //is the longest possible symbol in avvocadopnean?
 
@@ -220,7 +222,7 @@ void EngToAvv(void)
             avvOutput[iAvvOutput] = ' ';
             iAvvOutput++;
         } //deals with punctuation markers which end sentence - don't want redundant space
-        else if (EngAvvInput[i] == '.' || EngAvvInput[i] == ',' || EngAvvInput[i] == '?' || EngAvvInput[i] == '!' || EngAvvInput[i] == '\'') 
+        else if (EngAvvInput[i] == '.' || EngAvvInput[i] == ',' || EngAvvInput[i] == '?' || EngAvvInput[i] == '!' || EngAvvInput[i] == '\'')
         {
             avvOutput[iAvvOutput] = EngAvvInput[i];
             iAvvOutput++;
@@ -239,7 +241,7 @@ void EngToAvv(void)
             //printf("... ");
             for (int i = 0; i < 3; i++)
             {
-                avvOutput[iAvvOutput] = '.'; 
+                avvOutput[iAvvOutput] = '.';
                 iAvvOutput++;
             }
             avvOutput[iAvvOutput] = ' ';
@@ -314,7 +316,7 @@ void EngToAvv(void)
     printf("\n");
 
     //Avvocadopnean
-    printf("Avvocadopnean:  %s\n", avvOutput); 
+    printf("Avvocadopnean:  %s\n", avvOutput);
 
     ///////////////
     //FILE OUTPUT//
@@ -340,14 +342,14 @@ void AvvToEng(void)
     printf("\n");
     printf("WARNING: This mode is buggy. Some texts will not decipher properly\n");
     printf("\n");
-    
+
     //AVV->ENG EXPLAINED (uppercase example)
     //user types ,? .' ?, ?, ?'
     //take ,?
     //1) confirms is 2 letters (followed by space) and not a number (would start with ^ or *) nor hyphen (--)
     //2) index of , in AVVSYMBOLS[] is 1, ? is 2.
     //       multiply first by 5, then add second, then add ASCII 65 for A
-    //       (1 * 5) + 2 + 65 = 72, or ASCII value for H 
+    //       (1 * 5) + 2 + 65 = 72, or ASCII value for H
     //3) any groupings of 1 characters are left alone
     //       any groupings of 3 characters are deemed uppercase/lowercase (starts with ^ or *) or z (...)
 
@@ -372,7 +374,7 @@ void AvvToEng(void)
     int SymbolRow;
     int SymbolColumn;
     //records to array in case of output
-    char engOutput[MAXINPUT/2 +1];    
+    char engOutput[MAXINPUT/2 +1];
     //Eng is at least half the size of Avv if only punctuations are typed in, probably much shorter
     int nullChecker = 1;
     int iEngOutput = 0;
@@ -380,7 +382,7 @@ void AvvToEng(void)
     //printf("test message - you reached me\n");
 
     int i = 0; //tracks which element of AvvEngInput on
-    
+
     int testWhile = 0;
     while (nullChecker != '\0') //not a for loop like Eng->Avv, because in E->A each char expands from 1 to multiple, but in A->E a group of 1~4 chars group into 1
     {
@@ -394,11 +396,11 @@ void AvvToEng(void)
             //printf("entered '-' zone\n");
             engOutput[iEngOutput] = ' ';
             iEngOutput++;
-            i++;            
+            i++;
         } else if (AvvEngInput[i] == ' ')
         {
             //printf("entered ' ' zone\n");
-            i++;            
+            i++;
         }  else if ( ( (AvvEngInput[i] == '.') && (AvvEngInput[i+1] == '.') && (AvvEngInput[i+2] == '.') ) || ( (AvvEngInput[i] == '*') && (AvvEngInput[i+1] == '.') && (AvvEngInput[i+2] == '.') && (AvvEngInput[i+3] == '.') ) ) //lowercase z
         {
             engOutput[iEngOutput] = 'z';
@@ -414,7 +416,7 @@ void AvvToEng(void)
 
         //then move onto the rest of characters
         //a-y, or number if start w/ ^ * OR IF 3 letter (upper/lowercase specifier), uses parts of 2 letter function
-        else if ( ((AvvEngInput[i+1] != ' ') && ( (AvvEngInput[i+2] == ' ') || (AvvEngInput[i+2] == '\0') ) ) || ((AvvEngInput[i+1] != ' ') && (AvvEngInput[i+2] != ' ') && ( (AvvEngInput[i+3] == ' ') || (AvvEngInput[i+3] == '\0') ) ) ) 
+        else if ( ((AvvEngInput[i+1] != ' ') && ( (AvvEngInput[i+2] == ' ') || (AvvEngInput[i+2] == '\0') ) ) || ((AvvEngInput[i+1] != ' ') && (AvvEngInput[i+2] != ' ') && ( (AvvEngInput[i+3] == ' ') || (AvvEngInput[i+3] == '\0') ) ) )
         {
             if ((AvvEngInput[i+1] != ' ') && (AvvEngInput[i+2] != ' ') && (AvvEngInput[i+2] != '\0') && (AvvEngInput[i+3] == ' ')) //3 letter case specifier realm
             {
@@ -423,7 +425,7 @@ void AvvToEng(void)
                 else if (AvvEngInput[i] == '*')
                     letterCase = 97;
 
-                i++;                
+                i++;
             } else
             {
                 letterCase = 97;
@@ -718,7 +720,7 @@ int getYesNo(void)
     while (error == 0)
     {
         //getchar();
-        
+
         if (fgets(tmpStore, 4, stdin))
         {
             tmpStore[strcspn(tmpStore, "\n")] = 0;
@@ -770,7 +772,7 @@ void fileOutput(char * fileName, char * originalText, char * cipherText)
     fprintf(fpointer, "\n");
 
     fclose(fpointer);
-    
+
     printf("Output text successfully written to file %s\n", fileName);
     printf("%s is located in the same folder/directory where this program is stored\n", fileName);
 }

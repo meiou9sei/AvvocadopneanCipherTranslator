@@ -37,8 +37,12 @@ x) write in README.md instructions on how to use program
 
 test text for learning git branches
 
+<<<<<<< HEAD
 learnGit234
 
+=======
+comment
+>>>>>>> 72ea44193f075e1d00aff545b06f3f9c3bb842c2
 
 personal notes:
 changes from original avvocadopnean rules:

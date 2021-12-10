@@ -34,7 +34,7 @@ first and foremost: fix Avv->eng so it's not so buggy
 x) add spoken generator
 x) write in README.md instructions on how to use program
 
-
+<learnGit2>
 
 
 

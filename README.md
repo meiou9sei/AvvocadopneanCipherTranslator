@@ -35,12 +35,6 @@ x) add spoken generator
 x) write in README.md instructions on how to use program
 
 
-test text for learning git branches
-
-learnGit234
-
-comment
-
 personal notes:
 changes from original avvocadopnean rules:
 - base10/binary do not need !_ and ?_ distinguishers, since they are already distinguishable

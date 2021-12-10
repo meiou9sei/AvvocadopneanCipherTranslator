@@ -37,10 +37,7 @@ x) write in README.md instructions on how to use program
 
 test text for learning git branches
 
-
-
-
-learnGit2
+learnGit234
 
 
 personal notes:

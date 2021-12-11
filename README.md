@@ -1,7 +1,9 @@
 # AvvocadopneanCipherTranslator
-Translates Avvocadopnean Cipher to English and vice versa. Personal project
+Translates Avvocadopnean Cipher to English and vice versa. Personal project of Cameron Avvampato. Written in C. Enciphers English to Avvocadopnean and vice versa.
 
-Currently Avv->Eng is a bit buggy, but should work for simple messages
+Current bugs:
+* Avv->Eng is a bit buggy, but should work for simple messages. punctuation/spacing may be buggy, and numbers do not work
+* filereader requires confirmation on output everytime for now
 
 ## How to install and use
 not sure. I'll look into it later. pretty sure you can just compile the .c file and it'll work though
@@ -9,15 +11,13 @@ not sure. I'll look into it later. pretty sure you can just compile the .c file 
 ## TODO:
 first and foremost: fix Avv->eng so it's not so buggy
 
-0) replace aboutAvv or aboutProgram with fileReader
-1) create and implement getInt function for use in menus so program doesn't crash upon entry of char
-  - probably take in input a char, then convert it to int
+1) replace menu option with a atoi and int checker. use getString function for menu so it doesn't crash
+    same with getYesNo. use getString, then check with getYesNo if it's yes/no/y/n, rather than taking input in getYesNo
 2)  Eng->Avv translator
   - add ability to switch between lowercase/uppercase with ^
+  - spacing on numbers is broken
 3) AvvToEng
-        reverse EngToAvv, basically. Try to modify EngToAvv functions so they're reusable here.
-        OR I think you can just 1) check if there's 2 (or 3 for z) symbols together 2) do x * 5 for first symbol, + x for second symbol to get ASCII int # for A-Z.
-        //^lowercase I think, try implementing ^ v later
+  fix it. also implement numbers
 4) Settings
   - would detect if settings file exists
   - can write basic settings like whether to use binary or decimal, (also add binary)
@@ -29,13 +29,12 @@ first and foremost: fix Avv->eng so it's not so buggy
         - go to next page
         - go to last page
             with keys probably n/ext and b/ack
-6) aboutProgram
-  - formalize it -_- 
+
 x) add spoken generator
 x) write in README.md instructions on how to use program
-
+x) restructure input to be dynamic string sizes with malloc?
 
 personal notes:
-changes from original avvocadopnean rules:
+changes from/for original avvocadopnean rules:
 - base10/binary do not need !_ and ?_ distinguishers, since they are already distinguishable
 - in case of - use, like "anne-marie", should print .. ?! ?! .' -- ?? .. !? ,! .' (double --)

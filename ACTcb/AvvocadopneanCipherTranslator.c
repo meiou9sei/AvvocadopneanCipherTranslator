@@ -232,6 +232,7 @@ void fileReader(void)
     if (fPointer == NULL)
     {
         printf("ERROR: file not found\n");
+        printf("Don't forget to add \".txt\" at the end of your filename\n");
         returnHome();
         return;
     }
@@ -246,7 +247,7 @@ void fileReader(void)
         lineCounter++;
         line++;
     }
-    printf("lineCounter is %d\n", lineCounter);
+    //printf("lineCounter is %d\n", lineCounter);
 
     fclose(fPointer);
 
@@ -538,6 +539,9 @@ void engtoavvCipher(int MAXINPUT, char *EngAvvInput)
     //prints English and Avvocadopnean out//
     ////////////////////////////////////////
     printf("\n");
+    printf("Pre-cipher text: %s", EngAvvInput);
+
+    printf("\n");
     printf("Comparison:\n");
     //English (needs to artificially add spaces in)
     printf("English:        ");
@@ -572,7 +576,7 @@ void engtoavvCipher(int MAXINPUT, char *EngAvvInput)
     printf("Would you like to output a text file? Y/N: ");
     //create avvoutput as a string
     char fileName[15]; //prevents strcat crashing in fileReader?
-    strcpy(fileName, "avvToEng");
+    strcpy(fileName, "engToAvv");
     if (getYesNo() == 1)
         fileOutput(fileName, EngAvvInput, avvOutput);
 
@@ -760,7 +764,7 @@ void avvtoengCipher(int MAXINPUT, char *AvvEngInput)
     printf("Would you like to output a text file? Y/N: ");
     //create avvoutput as a string
     char fileName[15]; //prevents strcat crashing in fileReader?
-    strcpy(fileName, "engToAvv");
+    strcpy(fileName, "AvvToEng");
     if (getYesNo() == 1)
         fileOutput(fileName, AvvEngInput, engOutput);
 

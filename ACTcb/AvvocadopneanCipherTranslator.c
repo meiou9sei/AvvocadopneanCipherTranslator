@@ -4,8 +4,6 @@
 #include <time.h>
 #include <ctype.h>
 
-//test comments
-
 //Avvocadopnean Cipher Translator
 //This program will translate between English and Avvocadopnean, with the standard A-Z, 0-9, and symbols . , ? ! '
 //later more symbols from Avvocadopnean will be included
@@ -16,8 +14,10 @@ void EngToAvv(void);
 void AvvToEng(void);
 void fileReader(void);
 void aboutAvv(void);
-void aboutProgram(void);
 void Settings(void);
+//cipher functions
+void engtoavvCipher(int, char *);
+void avvtoengCipher(int, char *);
 //functions for navigation
 void returnHome(void);
 int pageflipper(void);
@@ -50,10 +50,10 @@ int main()
             AvvToEng();
         } else if (menuUserChoice == 3)
         {
-            aboutAvv();
+            fileReader();
         } else if (menuUserChoice == 4)
         {
-            aboutProgram();
+            aboutAvv();
         } else if (menuUserChoice == 5)
         {
             Settings();
@@ -87,8 +87,8 @@ int mainMenu(void)
         printf("\n");
         printf("    1. English -> Avvocadopnean\n");
         printf("    2. Avvocadopnean -> English\n");
-        printf("    3. About Avvocadopnean\n");
-        printf("    4. About this program\n");
+        printf("    3. File Reader\n");
+        printf("    4. About this Program/Avvocadopnean\n");
         printf("    5. Settings\n");
         printf("\n");
         printf("    0. Exit Program\n");
@@ -122,8 +122,265 @@ int mainMenu(void)
 void EngToAvv(void)
 {
     printf("\n--------------------------------------------------\n");
+    printf("\n");
     printf("English -> Avvocadopnean\n");
+    printf("\n");
 
+    /////////////////////
+    //TAKES USER STRING//
+    /////////////////////
+
+    const int MAXINPUT = 250;
+
+    printf("Input expression to encipher Eng -> Avv\n");
+    printf("Up to %d characters\n", MAXINPUT);
+    printf("\n");
+    printf("English to encipher: ");
+    char EngAvvInput[MAXINPUT+1];
+    getString(MAXINPUT, EngAvvInput);
+
+    //encipher string
+    engtoavvCipher(MAXINPUT, EngAvvInput);
+
+    returnHome();
+}
+
+//deciphers Avvocadopnean to English
+void AvvToEng(void)
+{
+    printf("\n--------------------------------------------------\n");
+    printf("\n");
+    printf("Avvocadopnean -> English\n");
+    printf("\n");
+
+    printf("WARNING: This mode is buggy. Some texts will not decipher properly\n");
+    printf("\n");
+
+    /////////////////////
+    //TAKES USER STRING//
+    /////////////////////
+
+    const int MAXINPUT = 1000;
+
+    printf("Input expression to decipher Avv -> Eng\n");
+    printf("Up to %d characters\n", MAXINPUT);
+    printf("\n");
+    printf("Avvocadopnean to decipher: ");
+    char AvvEngInput[MAXINPUT+1];
+    getString(MAXINPUT, AvvEngInput);
+    //printf("back in AvvToEng, your string is: %s\n", AvvEngInput);
+
+    //deciphers Avv to Eng
+    avvtoengCipher(MAXINPUT, AvvEngInput);
+
+    returnHome();
+}
+
+void fileReader(void)
+{
+    printf("\n--------------------------------------------------\n");
+    printf("\n");
+    printf("FILE READER\n");
+    printf("\n");
+    printf("Have a .txt file to read?\n");
+    printf("\n");
+    printf("    1) English file\n");
+    printf("    2) Avvocadopnean file\n");
+    printf("\n");
+    printf("    0) exit to menu\n");
+    printf("\n");
+
+    ////////////////////
+    //takes type to do//
+    ////////////////////
+
+    printf("Enter option: ");
+    int fileType = 0;
+    int nah = 0;
+    while (nah == 0)
+    {
+        nah = 1;
+        char menuOp[3];
+        getString(2, menuOp);
+        //printf("string %s\n", menuOp);
+        if (menuOp[0] == '1')
+            fileType = 1;
+        else if (menuOp[0] == '2')
+            fileType = 2;
+        else if (menuOp[0] == '0')
+            fileType = 0;
+        else
+        {
+            printf("Error. Enter valid menu option 0-2.\n");
+            nah = 0;
+        }
+    }
+    printf("\n");
+
+    //////////////
+    //reads file//
+    //////////////
+    int inputLength = 500;
+    int maxlines = 100;
+    printf("Reads up to %d characters per line, %d lines\n", inputLength, maxlines);
+    printf("Enter name of file (with .txt) (file should be in same folder as program): ");
+    char fileName[100];
+    getString(99, fileName);
+
+    FILE * fPointer;
+    fPointer = fopen(fileName, "r");
+    if (fPointer == NULL)
+    {
+        printf("ERROR: file not found\n");
+        returnHome();
+        return;
+    }
+
+    char storesLines[maxlines][inputLength];
+    int lineCounter = 0;
+    int line = 0;
+
+    while (!feof(fPointer))
+    {
+        fgets(storesLines[line], inputLength, fPointer);
+        lineCounter++;
+        line++;
+    }
+    printf("lineCounter is %d\n", lineCounter);
+
+    fclose(fPointer);
+
+    /////////////////////////////////////////////////
+    //sends off to appropriate function for message//
+    /////////////////////////////////////////////////
+    if (fileType == 1)
+    {
+        for (int line = 0; line < lineCounter; line++)
+        {
+            engtoavvCipher(inputLength, storesLines[line]);
+        }
+    }
+    else if (fileType == 2)
+    {
+        for (int line = 0; line < lineCounter; line++)
+        {
+            avvtoengCipher(inputLength, storesLines[line]);
+        }
+    }
+
+
+    returnHome();
+}
+
+//explains how Avvocadopnean works
+void aboutAvv(void)
+{
+    //page 0
+    printf("\n--------------------------------------------------\n");
+    printf("\n");
+    printf("\nABOUT AVVOCADOPNEAN\n");
+    printf("\n");
+
+    //generates avvocadopnean symbol table
+    //REMOVE THIS if you can get constant char array working
+    for (int i = 0; i < 5; i++)
+    {
+        for (int j = 0; j < 5; j++)
+        {
+            printf("%c%c ", AVVSYMBOLS[i], AVVSYMBOLS[j]);
+        }
+        printf("\n");
+    }
+    printf("...");
+    printf("\n");
+
+    printf("Table of contents\n");
+    printf("    1. History\n");
+    printf("    2. Basic Avvocadopnean\n");
+    printf("    3. Punctuation in Avvocadopnean\n");
+    printf("    4. Numbers in Avvocadopnean\n");
+    printf("    5. Other forms of Avvocadopnean\n");
+    printf("\n");
+    printf("    0. Return to Main Menu\n");
+
+
+    //page 1
+    printf("\n--------------------------------------------------\n");
+    printf("\nHISTORY\n");
+    printf("\n");
+    printf("Avvocadopnean is a simple cipher I created while in highschool.\n");
+    printf("It coincidentally resembles the Tap Code cipher, and honestly\n");
+    printf("that's probably a better developed cipher than what I came up with.\n");
+    printf("Avvocadopnean uses the symbols found on the bottom row of the iOS keyboard's\n");
+    printf("special characters keyboard, and thus can be rapidly typed on an iPhone with practice.\n");
+    printf("\n");
+    printf("Over time, cursive, caligraphy, morse, and spoken forms of Avvocadopnean were developed.\n");
+    printf("There is very little use for this cipher as basically only I speak it lmao\n");
+
+    //page 2
+    printf("\n--------------------------------------------------\n");
+    printf("USING AVVOCADOPNEAN\n");
+    printf("\n");
+    printf("To use standard script Avvocadopnean, lay out the symbols .,?!' to a 5x5 grid like so:\n");
+    printf("\n");
+    printf("           .   ,   ?   !   '  \n");
+    printf("         +-------------------+\n");
+    printf("       . | A | B | C | D | E |\n");
+    printf("         +-------------------+\n");
+    printf("       , | F | G | H | I | J |\n");
+    printf("         +-------------------+\n");
+    printf("       ? | K | L | M | N | O |\n");
+    printf("         +-------------------+\n");
+    printf("       ! | P | Q | R | S | T |\n");
+    printf("         +-------------------+\n");
+    printf("       ' | U | V | W | X | Y |\n");
+    printf("         +-------------------+\n");
+    printf("        Z is represented as ...\n");
+    printf("\n");
+    printf("\n");
+    printf("To encipher a letter, first use the horizontal row then the vertical column.\n");
+    printf("Words are separated by a -\n");
+    printf("\n");
+    printf("For example:\n");
+    printf("\n");
+    printf("    ,? .' ?, ?, ?' - '? ?' !? ?, .!\n");
+    printf("    h  e  l  l  o    w  o  r  l  d\n");
+    printf("\n");
+
+    printf("\n--------------------------------------------------\n");
+    printf("ABOUT THIS PROGRAM\n");
+    printf("\n");
+    printf("The AVVOCADOPNEAN CIPHER TRANSLATOR program was written by Cameron Avvampato (me) in C.\n");
+    printf("This program intends to:\n");
+    printf("    1. Translate Avvocadopnean and English to eachother\n");
+    printf("    2. Read and Write .txt files with English/Avvocadopnean\n");
+    printf("and:\n");
+    printf("    A. Be my first real program\n");
+    printf("        that's heckin' cool yo\n");
+    printf("    B. Solidify my understanding of arrays and loops\n");
+    printf("        by generating the cipher using ASCII codes and loops\n");
+
+    returnHome();
+}
+
+void Settings(void)
+{
+    printf("\n--------------------------------------------------\n");
+    printf("beep boop\n");
+
+    for (int i = 0; i < 5; i++)
+    {
+        printf("%d character is %c\n", i, AVVSYMBOLS[i]);
+    }
+
+
+    returnHome();
+}
+////////////////////
+//CIPHER FUNCTIONS//
+////////////////////
+void engtoavvCipher(int MAXINPUT, char *EngAvvInput)
+{
     /*
     **************************
     ASCII char's int values:
@@ -159,18 +416,6 @@ void EngToAvv(void)
     printf("       90 is represented as ...\n");
     */
 
-    /////////////////////
-    //TAKES USER STRING//
-    /////////////////////
-
-    const int MAXINPUT = 250;
-
-    printf("Input expression to encipher Eng -> Avv\n");
-    printf("Up to %d characters\n", MAXINPUT);
-    printf("\n");
-    printf("English to encipher: ");
-    char EngAvvInput[MAXINPUT+1];
-    getString(MAXINPUT, EngAvvInput);
     //printf("back in EngToAvv, your string is: %s\n", EngAvvInput);
     //RMVME remove this when capitalization added afterwards:
     for(int i = 0; EngAvvInput[i]; i++)
@@ -326,23 +571,15 @@ void EngToAvv(void)
     printf("\n");
     printf("Would you like to output a text file? Y/N: ");
     //create avvoutput as a string
-    char fileName[] = "avvToEng";
+    char fileName[15]; //prevents strcat crashing in fileReader?
+    strcpy(fileName, "avvToEng");
     if (getYesNo() == 1)
         fileOutput(fileName, EngAvvInput, avvOutput);
 
-    returnHome();
 }
 
-//deciphers Avvocadopnean to English
-void AvvToEng(void)
+void avvtoengCipher(int MAXINPUT, char *AvvEngInput)
 {
-    printf("\n--------------------------------------------------\n");
-    printf("Avvocadopnean -> English\n");
-
-    printf("\n");
-    printf("WARNING: This mode is buggy. Some texts will not decipher properly\n");
-    printf("\n");
-
     //AVV->ENG EXPLAINED (uppercase example)
     //user types ,? .' ?, ?, ?'
     //take ,?
@@ -352,20 +589,6 @@ void AvvToEng(void)
     //       (1 * 5) + 2 + 65 = 72, or ASCII value for H
     //3) any groupings of 1 characters are left alone
     //       any groupings of 3 characters are deemed uppercase/lowercase (starts with ^ or *) or z (...)
-
-    /////////////////////
-    //TAKES USER STRING//
-    /////////////////////
-
-    const int MAXINPUT = 1000;
-
-    printf("Input expression to decipher Avv -> Eng\n");
-    printf("Up to %d characters\n", MAXINPUT);
-    printf("\n");
-    printf("Avvocadopnean to decipher: ");
-    char AvvEngInput[MAXINPUT+1];
-    getString(MAXINPUT, AvvEngInput);
-    //printf("back in AvvToEng, your string is: %s\n", AvvEngInput);
 
     /////////////////////////
     //DECIPHERS USER STRING//
@@ -536,131 +759,12 @@ void AvvToEng(void)
     printf("\n");
     printf("Would you like to output a text file? Y/N: ");
     //create avvoutput as a string
-    char fileName[] = "engToAvv";
+    char fileName[15]; //prevents strcat crashing in fileReader?
+    strcpy(fileName, "engToAvv");
     if (getYesNo() == 1)
         fileOutput(fileName, AvvEngInput, engOutput);
 
-    returnHome();
-}
 
-void fileReader(void)
-{
-    printf("\n--------------------------------------------------\n");
-    printf("Have a .txt file to read? Translate it here!\n");
-    printf("\n");
-    //have 1 Eng->Avv, 2 Avv->Eng, and 0 (exit) as options
-}
-
-//explains how Avvocadopnean works
-void aboutAvv(void)
-{
-    //page 0
-    printf("\n--------------------------------------------------\n");
-    printf("\nABOUT AVVOCADOPNEAN\n");
-    printf("\n");
-
-    //generates avvocadopnean symbol table
-    //REMOVE THIS if you can get constant char array working
-    for (int i = 0; i < 5; i++)
-    {
-        for (int j = 0; j < 5; j++)
-        {
-            printf("%c%c ", AVVSYMBOLS[i], AVVSYMBOLS[j]);
-        }
-        printf("\n");
-    }
-    printf("...");
-    printf("\n");
-
-    printf("Table of contents\n");
-    printf("    1. History\n");
-    printf("    2. Basic Avvocadopnean\n");
-    printf("    3. Punctuation in Avvocadopnean\n");
-    printf("    4. Numbers in Avvocadopnean\n");
-    printf("    5. Other forms of Avvocadopnean\n");
-    printf("\n");
-    printf("    0. Return to Main Menu\n");
-
-
-    //page 1
-    printf("\n--------------------------------------------------\n");
-    printf("\nHISTORY\n");
-    printf("\n");
-    printf("Avvocadopnean is a simple cipher I created while in highschool.\n");
-    printf("It coincidentally resembles the Tap Code cipher, and honestly\n");
-    printf("that's probably a better developed cipher than what I came up with.\n");
-    printf("Avvocadopnean uses the symbols found on the bottom row of the iOS keyboard's\n");
-    printf("special characters keyboard, and thus can be rapidly typed on an iPhone with practice.\n");
-    printf("\n");
-    printf("Over time, cursive, caligraphy, morse, and spoken forms of Avvocadopnean were developed.\n");
-    printf("There is very little use for this cipher as basically only I speak it lmao\n");
-
-    //page 2
-    printf("\n--------------------------------------------------\n");
-    printf("\n");
-    printf("USING AVVOCADOPNEAN\n");
-    printf("\n");
-    printf("To use standard script Avvocadopnean, lay out the symbols .,?!' to a 5x5 grid like so:\n");
-    printf("\n");
-    printf("           .   ,   ?   !   '  \n");
-    printf("         +-------------------+\n");
-    printf("       . | A | B | C | D | E |\n");
-    printf("         +-------------------+\n");
-    printf("       , | F | G | H | I | J |\n");
-    printf("         +-------------------+\n");
-    printf("       ? | K | L | M | N | O |\n");
-    printf("         +-------------------+\n");
-    printf("       ! | P | Q | R | S | T |\n");
-    printf("         +-------------------+\n");
-    printf("       ' | U | V | W | X | Y |\n");
-    printf("         +-------------------+\n");
-    printf("        Z is represented as ...\n");
-    printf("\n");
-    printf("\n");
-    printf("To encipher a letter, first use the horizontal row then the vertical column.\n");
-    printf("Words are separated by a -\n");
-    printf("\n");
-    printf("For example:\n");
-    printf("\n");
-    printf("    ,? .' ?, ?, ?' - '? ?' !? ?, .!\n");
-    printf("    h  e  l  l  o    w  o  r  l  d\n");
-    printf("\n");
-
-    returnHome();
-}
-
-//basically the credits for the program
-void aboutProgram(void)
-{
-    printf("\n--------------------------------------------------\n");
-    printf("\n");
-    printf("ABOUT THIS PROGRAM\n");
-    printf("\n");
-    printf("The AVVOCADOPNEAN CIPHER TRANSLATOR program was written by Cameron Avvampato (me) in C.\n");
-    printf("This program was intends to:\n");
-    printf("    1. Translate Avvocadopnean and English to eachother\n");
-    printf("    2. Read and Write .txt files with English/Avvocadopnean\n");
-    printf("and:\n");
-    printf("    A. Be my first real program\n");
-    printf("        that's heckin' cool yo\n");
-    printf("    B. Solidify my understanding of arrays and loops\n");
-    printf("        by generating the cipher using ASCII codes and loops\n");
-
-    returnHome();
-}
-
-void Settings(void)
-{
-    printf("\n--------------------------------------------------\n");
-    printf("beep boop\n");
-
-    for (int i = 0; i < 5; i++)
-    {
-        printf("%d character is %c\n", i, AVVSYMBOLS[i]);
-    }
-
-
-    returnHome();
 }
 
 //////////////////////
@@ -752,7 +856,8 @@ int getYesNo(void)
 ///////////////
 void fileOutput(char * fileName, char * originalText, char * cipherText)
 {
-    strcat(fileName, ".txt");
+    //printf("reached fileOutput line 1\n");
+    strcat(fileName, ".txt");   //apparently this strcat causes "stack smashing" (buffer overflow, I think) if fileName in wherever this is called doesn't have enough slots for ".txt\0"
 
     //file creation if doesn't exist
     FILE *fpointer = fopen(fileName, "a");

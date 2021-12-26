@@ -24,6 +24,7 @@ int pageflipper(void);
 //functions for input
 void getString(int, char *);
 int getYesNo(void);
+int getDigit(void);
 //file output
 void fileOutput(char *, char *, char *);
 
@@ -99,7 +100,8 @@ int mainMenu(void)
         int invalidOption = 1;
         while (invalidOption == 1)
         {
-            scanf("%d", &menuUserChoice);
+
+            menuUserChoice = getDigit();
 
             if (menuUserChoice >= 0 && (menuUserChoice <= menuOptions) )
             {
@@ -781,10 +783,10 @@ void returnHome(void)
 {
     printf("\nEnter 0 to return to main menu: ");
     int loopTrapper = 1;
+    int userReturn;
     while (loopTrapper == 1)
     {
-        int userReturn;
-        scanf(" %d", &userReturn);
+        userReturn = getDigit();
 
         if (userReturn == 0)
         {
@@ -852,6 +854,28 @@ int getYesNo(void)
         }
         printf("Invalid Input: Input Yes or No (Y/N): ");
     }
+}
+
+int getDigit(void) //http://sekrit.de/webdocs/c/beginners-guide-away-from-scanf.html
+{
+    int a;
+    int rc;
+    while ((rc = scanf("%d", &a)) == 0)  // Neither success (1) nor EOF
+    {
+        // clear what is left, the * means only match and discard:
+        scanf("%*[^\n]");
+        // input was not a number, ask again:
+        printf("Invalid. Enter a number: ");
+    }
+    if (rc == EOF)
+    {
+        printf("End of file reached. No numbers read.\n");
+    }
+    else
+    {
+        //testmsg printf("You entered %d.\n", a);
+    }
+    return a;
 }
 
 

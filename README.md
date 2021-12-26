@@ -6,7 +6,9 @@ Current bugs:
 * filereader requires confirmation on output every line for now
 
 ## How to install and use
-pretty sure you can just compile the .c file and it'll work though
+On windows, you can compile AvvocadopneanCipherTranslator.c in ACTcb folder, or download the AvvocadopneanCipherTranslator.exe file (located within same folder) and run that for windows. 
+
+On mac and linux, you can just compile it I'm pretty sure with gcc -o AvvocadopneanCipherTranslator.c ACT, then run ./ACT 
 
 ## TODO:
 first and foremost: fix Avv->eng so it's not so buggy

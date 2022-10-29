@@ -395,7 +395,7 @@ void engtoavvCipher(int MAXINPUT, char *EngAvvInput)
     //ENG->AVV EXPLAINED (uppercase example)
     //user types HELLO
     //int values 72 69 76 76 79
-    //replaces those values with -65. / and % resulting int
+    //replaces those values with -64. / and % resulting int
     //ex: 72 - 64 = 8. then divide 8 / 5 = 1, or 1st row (,), then 8 % 5 = 3, or 3rd column (?).
     //takes these from AVVSYMBOLS[] and outputs to engAvvResult[], which increments each time and gets printed
     //ingenious i know hehe >:)
